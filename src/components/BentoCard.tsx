@@ -10,6 +10,7 @@ interface BentoCardProps {
   link: string;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
+  style?: React.CSSProperties;
 }
 
 const BentoCard = ({ 
@@ -18,7 +19,8 @@ const BentoCard = ({
   image, 
   link, 
   className,
-  size = 'md' 
+  size = 'md',
+  style
 }: BentoCardProps) => {
   return (
     <Link 
@@ -30,6 +32,7 @@ const BentoCard = ({
         size === 'lg' && 'row-span-1 col-span-1 md:col-span-2 md:row-span-2',
         className
       )}
+      style={style}
     >
       <div className="absolute inset-0">
         <img 
