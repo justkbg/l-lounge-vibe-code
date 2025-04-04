@@ -1,0 +1,35 @@
+
+:root {
+  /* Adinkra symbol configuration */
+  --adinkra-opacity: 0.05;
+  --adinkra-scale: 60px;
+  --adinkra-rotation: 0deg;
+  --adinkra-spacing: 120px;
+  
+  /* L-Lounge color palette */
+  --midnight-black: #0B0B0F;
+  --royal-gold: #FFD700;
+  --ashen-grey: #1F1F2A;
+  --neon-amber: #FF9900;
+  --kente-red: #FF3D00;
+  --kente-yellow: #FBC02D;
+  --kente-green: #43A047;
+  --kente-blue: #0288D1;
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(31, 31, 42, 0.7);
+  --glass-border: rgba(255, 215, 0, 0.1);
+  --glass-blur: 8px;
+  
+  /* Animation timings */
+  --animation-slow: 0.8s;
+  --animation-medium: 0.5s;
+  --animation-fast: 0.3s;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --adinkra-opacity: 0.08;
+  }
+}

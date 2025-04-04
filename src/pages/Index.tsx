@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, Music } from 'lucide-react';
@@ -7,6 +6,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BentoCard from '@/components/BentoCard';
 import { Card, CardContent } from '@/components/ui/card';
+import AdinkraBackground from '@/components/3d/AdinkraBackground';
+import FloatingElement from '@/components/3d/FloatingElement';
+import { adinkraSymbols } from '@/assets/cultural-textures/adinkra-symbols';
 
 const HeroSection = () => {
   const [typingComplete, setTypingComplete] = useState(false);
