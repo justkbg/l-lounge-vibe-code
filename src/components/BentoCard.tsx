@@ -29,7 +29,7 @@ const BentoCard = ({
   const [imageError, setImageError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // High-quality fallback images from Unsplash
+  // More reliable fallback images with absolute URLs
   const fallbackImages = [
     "https://images.unsplash.com/photo-1590452224879-867e8012a828?q=80&w=1740&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=1736&auto=format&fit=crop",
@@ -44,29 +44,51 @@ const BentoCard = ({
     return fallbackImages[index];
   };
 
-  // Preload the image
+  // Preload the image with more robust error handling
   useEffect(() => {
     const img = new Image();
-    img.src = imageError ? getFallbackImage() : image;
-    img.onload = () => setIsLoaded(true);
-    img.onerror = () => {
-      setImageError(true);
-      // Try with fallback
-      const fallback = new Image();
-      fallback.src = getFallbackImage();
-      fallback.onload = () => setIsLoaded(true);
+    img.src = image;
+    
+    img.onload = () => {
+      setIsLoaded(true);
+      setImageError(false);
     };
-  }, [image, imageError]);
+    
+    img.onerror = () => {
+      console.log(`Failed to load image: ${image}, using fallback`);
+      setImageError(true);
+      
+      // Try with fallback
+      const fallbackImg = new Image();
+      const fallbackSrc = getFallbackImage();
+      fallbackImg.src = fallbackSrc;
+      
+      fallbackImg.onload = () => {
+        setIsLoaded(true);
+      };
+      
+      fallbackImg.onerror = () => {
+        console.error("Even fallback image failed to load:", fallbackSrc);
+      };
+    };
+    
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [image]);
 
   // Get the actual symbol to use - handle 'random' case
   const getSymbolKey = (): keyof typeof adinkraSymbols => {
     if (adinkraSymbol === 'random') {
-      return Object.keys(adinkraSymbols)[Math.floor(Math.random() * Object.keys(adinkraSymbols).length)] as keyof typeof adinkraSymbols;
+      const symbolKeys = Object.keys(adinkraSymbols) as Array<keyof typeof adinkraSymbols>;
+      return symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
     }
-    return adinkraSymbol as keyof typeof adinkraSymbols;
+    return adinkraSymbol;
   };
 
   const symbolKey = getSymbolKey();
+  const symbolSvg = adinkraSymbols[symbolKey];
 
   return (
     <Link 
@@ -111,11 +133,11 @@ const BentoCard = ({
         {/* Adinkra Symbol Overlay */}
         <div className="absolute inset-0 opacity-5 adinkra-pattern"></div>
 
-        {/* Ghanaian pattern background */}
+        {/* Ghanaian pattern background - Directly embed SVG for better reliability */}
         <div 
           className="absolute inset-0 opacity-10" 
           style={{ 
-            backgroundImage: `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(adinkraSymbols[symbolKey])}")`,
+            backgroundImage: `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(symbolSvg)}")`,
             backgroundSize: '80px',
             backgroundRepeat: 'repeat',
             transform: isHovered ? 'rotate(5deg) scale(1.1)' : 'rotate(0deg) scale(1)',
@@ -140,9 +162,10 @@ const BentoCard = ({
         {isHovered && (
           <>
             <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-r from-[#FF3D00] to-[#FBC02D] opacity-70 animate-pulse" />
+            {/* Directly render the SVG for the symbol instead of using dangerouslySetInnerHTML */}
             <div 
               className="absolute bottom-4 left-4 w-8 h-8 opacity-80"
-              dangerouslySetInnerHTML={{ __html: adinkraSymbols[symbolKey] }}
+              dangerouslySetInnerHTML={{ __html: symbolSvg }}
               style={{ 
                 animation: 'spin 4s linear infinite',
                 color: '#FFD700'

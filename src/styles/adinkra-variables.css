@@ -1,7 +1,7 @@
 
 :root {
   /* Adinkra symbol configuration */
-  --adinkra-opacity: 0.05;
+  --adinkra-opacity: 0.1;  /* Increased from 0.05 for better visibility */
   --adinkra-scale: 60px;
   --adinkra-rotation: 0deg;
   --adinkra-spacing: 120px;
@@ -30,6 +30,28 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   :root {
-    --adinkra-opacity: 0.08;
+    --adinkra-opacity: 0.15; /* Increased for better visibility in dark mode */
   }
+}
+
+/* Add these animation keyframes for symbols */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Add a CSS class to apply to elements that should display Adinkra symbols */
+.adinkra-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: var(--adinkra-opacity);
+  background-size: var(--adinkra-scale);
+  pointer-events: none;
 }

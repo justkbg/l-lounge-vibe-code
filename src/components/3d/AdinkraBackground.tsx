@@ -27,7 +27,7 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
     container.innerHTML = '';
     
     // Calculate number of symbols based on density
-    const symbolSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--adinkra-scale'));
+    const symbolSize = 60; // Using a fixed value instead of CSS variable to ensure consistency
     const spacing = symbolSize * (2 - density);
     
     const columns = Math.ceil(width / spacing);
@@ -52,12 +52,14 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
           wrapper.style.animation = `float ${animDuration}s infinite ease-in-out`;
         }
         
-        // Randomly select a symbol if none specified
-        const symbolKey = symbol === 'random' 
-          ? Object.keys(adinkraSymbols)[Math.floor(Math.random() * Object.keys(adinkraSymbols).length)] as keyof typeof adinkraSymbols
-          : symbol;
+        // Randomly select a symbol if 'random' is specified
+        let symbolToUse = symbol as keyof typeof adinkraSymbols;
+        if (symbol === 'random') {
+          const symbolKeys = Object.keys(adinkraSymbols) as Array<keyof typeof adinkraSymbols>;
+          symbolToUse = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
+        }
           
-        wrapper.innerHTML = adinkraSymbols[symbolKey];
+        wrapper.innerHTML = adinkraSymbols[symbolToUse];
         container.appendChild(wrapper);
       }
     }
