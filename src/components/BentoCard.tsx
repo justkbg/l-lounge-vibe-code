@@ -23,6 +23,21 @@ const BentoCard = ({
   style
 }: BentoCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Reliable fallback images from Unsplash
+  const fallbackImages = [
+    "https://images.unsplash.com/photo-1612172596334-bb7c1e3a3fa2?q=80&w=1740&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1535957998253-26ae1ef29506?q=80&w=1736&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1468817814611-b7edf94b5d60?q=80&w=1740&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1740&auto=format&fit=crop"
+  ];
+
+  // Get a deterministic fallback image based on the title length
+  const getFallbackImage = () => {
+    const index = title.length % fallbackImages.length;
+    return fallbackImages[index];
+  };
 
   return (
     <Link 
@@ -44,15 +59,15 @@ const BentoCard = ({
     >
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
         <img 
-          src={image} 
+          src={imageError ? getFallbackImage() : image} 
           alt={title} 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          onError={(e) => {
-            // Fallback image if the original doesn't load
-            e.currentTarget.src = "https://images.unsplash.com/photo-1470337458703-46ad1756a187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80";
-          }}
+          onError={() => setImageError(true)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+        
+        {/* Adinkra Symbol Overlay */}
+        <div className="absolute inset-0 opacity-5 adinkra-pattern"></div>
       </div>
       <div className="relative z-10 h-full flex flex-col justify-end p-6">
         <h3 className="text-xl md:text-2xl font-playfair font-bold text-primary mb-2 kente-border">{title}</h3>
