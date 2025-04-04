@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,26 +8,39 @@ import Footer from '@/components/Footer';
 import BentoCard from '@/components/BentoCard';
 
 const HeroSection = () => {
+  const [typingComplete, setTypingComplete] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTypingComplete(true);
+    }, 3500);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="relative h-screen overflow-hidden">
-      {/* Hero video background - For simplicity we'll use an image instead of a video */}
+    <div className="relative h-screen overflow-hidden adinkra-bg">
+      {/* Hero background - Using a more reliable image */}
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1587574293340-e0011c4e8ecf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1932&q=80" 
-          alt="L-Lounge" 
+          alt="L-Lounge Atmosphere" 
           className="w-full h-full object-cover"
+          onError={(e) => {
+            e.currentTarget.src = "https://images.unsplash.com/photo-1519214605650-76a613ee3245?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80";
+          }}
         />
-        <div className="hero-overlay"></div>
+        <div className="hero-overlay bg-gradient-to-t from-[#0B0B0F] via-[#0B0B0F]/70 to-transparent"></div>
       </div>
       
       <div className="container-custom relative z-10 h-full flex flex-col justify-center items-center text-center">
-        <h1 className="text-5xl md:text-7xl font-playfair font-bold text-primary mb-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+        <h1 className={`text-5xl md:text-7xl font-playfair font-bold mb-4 ${typingComplete ? 'text-primary' : 'kinetic-text text-primary'}`} style={{ animationDelay: '0.2s' }}>
           L-Lounge
         </h1>
         <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl animate-fade-in" style={{ animationDelay: '0.4s' }}>
           Experience Ghana's most sophisticated lounge and restaurant, offering premium cocktails and a fusion of local and international cuisines.
         </p>
-        <Button size="lg" className="animate-fade-in" style={{ animationDelay: '0.6s' }} asChild>
+        <Button size="lg" className="animate-fade-in neo-glow hover-float" style={{ animationDelay: '0.6s', background: 'linear-gradient(90deg, #FFD700, #FF9900)' }} asChild>
           <Link to="/reservations">Book a Table</Link>
         </Button>
         
@@ -41,7 +54,7 @@ const HeroSection = () => {
 
 const AboutSection = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-muted">
+    <section className="py-20 bg-gradient-to-b from-[#0B0B0F] to-[#1F1F2A]">
       <div className="container-custom">
         <div className="text-center mb-16">
           <h2 className="section-title">Welcome to L-Lounge</h2>
@@ -51,8 +64,8 @@ const AboutSection = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <h3 className="text-2xl md:text-3xl font-playfair font-bold text-primary mb-4">Our Story</h3>
+          <div className="animate-fade-in glass-card p-8" style={{ animationDelay: '0.2s' }}>
+            <h3 className="text-2xl md:text-3xl font-playfair font-bold text-primary mb-4 kente-border">Our Story</h3>
             <p className="text-muted-foreground mb-4">
               Founded in 2018, L-Lounge has redefined the hospitality experience in Ghana by creating a space that celebrates both local culture and international luxury standards.
             </p>
@@ -64,11 +77,14 @@ const AboutSection = () => {
             </p>
           </div>
           
-          <div className="relative h-[400px] rounded-2xl overflow-hidden animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <div className="relative h-[400px] rounded-2xl overflow-hidden animate-fade-in glass-card" style={{ animationDelay: '0.4s' }}>
             <img 
               src="https://images.unsplash.com/photo-1517254797898-04edd251744f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80" 
               alt="L-Lounge Interior" 
               className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = "https://images.unsplash.com/photo-1525268323556-0505312a9b6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80";
+              }}
             />
           </div>
         </div>
@@ -110,7 +126,7 @@ const BentoGridSection = () => {
   ];
 
   return (
-    <section className="py-20">
+    <section className="py-20 bg-[#0B0B0F] adinkra-bg">
       <div className="container-custom">
         <div className="text-center mb-16">
           <h2 className="section-title">Explore L-Lounge</h2>
