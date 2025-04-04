@@ -12,7 +12,7 @@ interface BentoCardProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   style?: React.CSSProperties;
-  adinkraSymbol?: keyof typeof adinkraSymbols;
+  adinkraSymbol?: keyof typeof adinkraSymbols | 'random';
 }
 
 const BentoCard = ({ 
@@ -57,6 +57,16 @@ const BentoCard = ({
       fallback.onload = () => setIsLoaded(true);
     };
   }, [image, imageError]);
+
+  // Get the actual symbol to use - handle 'random' case
+  const getSymbolKey = (): keyof typeof adinkraSymbols => {
+    if (adinkraSymbol === 'random') {
+      return Object.keys(adinkraSymbols)[Math.floor(Math.random() * Object.keys(adinkraSymbols).length)] as keyof typeof adinkraSymbols;
+    }
+    return adinkraSymbol as keyof typeof adinkraSymbols;
+  };
+
+  const symbolKey = getSymbolKey();
 
   return (
     <Link 
@@ -105,7 +115,7 @@ const BentoCard = ({
         <div 
           className="absolute inset-0 opacity-10" 
           style={{ 
-            backgroundImage: `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(adinkraSymbols[adinkraSymbol])}")`,
+            backgroundImage: `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(adinkraSymbols[symbolKey])}")`,
             backgroundSize: '80px',
             backgroundRepeat: 'repeat',
             transform: isHovered ? 'rotate(5deg) scale(1.1)' : 'rotate(0deg) scale(1)',
@@ -132,7 +142,7 @@ const BentoCard = ({
             <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-r from-[#FF3D00] to-[#FBC02D] opacity-70 animate-pulse" />
             <div 
               className="absolute bottom-4 left-4 w-8 h-8 opacity-80"
-              dangerouslySetInnerHTML={{ __html: adinkraSymbols[adinkraSymbol] }}
+              dangerouslySetInnerHTML={{ __html: adinkraSymbols[symbolKey] }}
               style={{ 
                 animation: 'spin 4s linear infinite',
                 color: '#FFD700'

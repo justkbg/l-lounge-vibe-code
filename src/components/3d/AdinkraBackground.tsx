@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { adinkraSymbols } from '@/assets/cultural-textures/adinkra-symbols';
 
 interface AdinkraBackgroundProps {
-  symbol?: keyof typeof adinkraSymbols;
+  symbol?: keyof typeof adinkraSymbols | 'random';
   density?: number;
   opacity?: number;
   animated?: boolean;
