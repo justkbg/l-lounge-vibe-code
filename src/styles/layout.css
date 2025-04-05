@@ -1,0 +1,34 @@
+
+/* Base layout styling */
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Card components */
+.bento-card {
+  @apply relative overflow-hidden rounded-2xl bg-card p-6 transition-all duration-300 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)];
+}
+
+/* Enhanced grid layouts */
+.dynamic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-auto-rows: minmax(280px, auto);
+  gap: 1.5rem;
+}
+
+.dynamic-grid.masonry {
+  grid-template-rows: masonry;
+  align-items: start;
+}

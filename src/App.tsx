@@ -13,17 +13,39 @@ import Contact from "./pages/Contact";
 import Reservations from "./pages/Reservations";
 import NotFound from "./pages/NotFound";
 import { initCinematicScroll } from "./utils/cinematicScroll";
+import "./App.css";
+import "./styles/adinkra-variables.css";
 
-// Initialize animation on route changes
+// Enhanced animation on route changes
 const ScrollToTop = () => {
   const location = useLocation();
   
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Smooth scroll to top with easing
+    const scrollToTop = () => {
+      const currentPosition = window.scrollY;
+      if (currentPosition > 0) {
+        window.requestAnimationFrame(scrollToTop);
+        window.scrollTo(0, currentPosition - currentPosition / 8);
+      }
+    };
+    
+    scrollToTop();
     
     // Run cinematic scroll initialization after route change
     setTimeout(() => {
       initCinematicScroll();
+      
+      // Add page transition class to main content
+      const mainContent = document.querySelector('main');
+      if (mainContent) {
+        mainContent.classList.add('fade-in-up');
+      }
+      
+      // Add animated class to all adinkra symbols
+      document.querySelectorAll('.adinkra-symbol').forEach(symbol => {
+        symbol.classList.add('animate-fade-in');
+      });
     }, 100);
   }, [location]);
   

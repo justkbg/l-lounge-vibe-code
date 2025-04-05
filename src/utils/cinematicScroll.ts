@@ -11,9 +11,22 @@ export const initCinematicScroll = () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-      } else {
-        // Uncomment to make elements hide again when scrolled out of view
-        // entry.target.classList.remove('visible');
+        
+        // Add an extra class for cinematic entrance based on position
+        const rect = entry.target.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const windowWidth = window.innerWidth;
+        
+        // Bottom entrance
+        if (rect.top > windowHeight * 0.7) {
+          entry.target.classList.add('from-bottom');
+        } 
+        // Side entrance
+        else if (rect.left < windowWidth * 0.3) {
+          entry.target.classList.add('from-left');
+        } else if (rect.right > windowWidth * 0.7) {
+          entry.target.classList.add('from-right');
+        }
       }
     });
   };
@@ -41,25 +54,102 @@ export const initCinematicScroll = () => {
       const targetElement = document.querySelector(targetId);
       if (!targetElement) return;
       
-      window.scrollTo({
-        top: targetElement.getBoundingClientRect().top + window.scrollY,
-        behavior: 'smooth'
-      });
+      // Enhanced smooth scroll with easing
+      const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+      const startPosition = window.scrollY;
+      const distance = elementPosition - startPosition;
+      const duration = 1000; // ms
+      let startTime: number | null = null;
+      
+      // Easing function
+      const easeInOutCubic = (t: number) => {
+        return t < 0.5 
+          ? 4 * t * t * t 
+          : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+      };
+
+      function animation(currentTime: number) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const easing = easeInOutCubic(progress);
+        
+        window.scrollTo(0, startPosition + distance * easing);
+        
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      
+      requestAnimationFrame(animation);
     });
   });
   
-  // Add parallax effect to elements with 'parallax-bg' class
+  // Enhanced parallax effect
+  const parallaxElements = document.querySelectorAll('.parallax-bg, .parallax-element');
+  
   window.addEventListener('scroll', () => {
-    const parallaxElements = document.querySelectorAll('.parallax-bg');
     const scrollY = window.scrollY;
     
     parallaxElements.forEach((element: Element) => {
       const el = element as HTMLElement;
       const speed = el.dataset.speed || '0.5';
-      const yPos = scrollY * parseFloat(speed);
+      const direction = el.dataset.direction || 'vertical';
       
-      el.style.backgroundPosition = `center ${yPos}px`;
+      if (direction === 'vertical') {
+        const yPos = scrollY * parseFloat(speed);
+        el.style.transform = `translateY(${yPos}px)`;
+      } else if (direction === 'horizontal') {
+        const xPos = scrollY * parseFloat(speed);
+        el.style.transform = `translateX(${xPos}px)`;
+      } else if (direction === 'rotate') {
+        const rotation = scrollY * parseFloat(speed) * 0.05;
+        el.style.transform = `rotate(${rotation}deg)`;
+      } else if (direction === 'scale') {
+        const baseScale = 1;
+        const scaleChange = scrollY * parseFloat(speed) * 0.001;
+        const newScale = baseScale + scaleChange;
+        el.style.transform = `scale(${newScale})`;
+      }
     });
+    
+    // Add subtle rotation to adinkra symbols based on scroll
+    const adinkraElements = document.querySelectorAll('.adinkra-bg::before');
+    adinkraElements.forEach((element: Element) => {
+      const el = element as HTMLElement;
+      const rotation = scrollY * 0.03;
+      el.style.transform = `rotate(${rotation}deg)`;
+    });
+  });
+  
+  // Add cursor trail effect
+  let trailElements: HTMLElement[] = [];
+  const maxTrails = 5;
+  
+  for (let i = 0; i < maxTrails; i++) {
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+    trail.style.opacity = `${1 - (i * 0.2)}`;
+    trail.style.width = `${10 - (i * 1.5)}px`;
+    trail.style.height = `${10 - (i * 1.5)}px`;
+    document.body.appendChild(trail);
+    trailElements.push(trail);
+  }
+  
+  document.addEventListener('mousemove', (e) => {
+    // Update the position of all trail elements with delay
+    setTimeout(() => {
+      trailElements.forEach((trail, index) => {
+        trail.style.opacity = '0.7';
+        trail.style.left = `${e.clientX}px`;
+        trail.style.top = `${e.clientY}px`;
+        
+        // Hide trail after a delay
+        setTimeout(() => {
+          trail.style.opacity = '0';
+        }, 100 * index);
+      });
+    }, 50); // slight delay for trailing effect
   });
 };
 
