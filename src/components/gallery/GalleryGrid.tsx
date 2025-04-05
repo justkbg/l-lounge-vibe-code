@@ -50,4 +50,4 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ images, filter, onImageClick 
 };
 
 export default GalleryGrid;
-export { fallbackImages, getFallbackImage };
+export { fallbackImages };

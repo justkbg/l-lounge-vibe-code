@@ -32,6 +32,9 @@ const ScrollToTop = () => {
     
     scrollToTop();
     
+    // Add cinematic page transition effect
+    document.body.classList.add('page-transition');
+    
     // Run cinematic scroll initialization after route change
     setTimeout(() => {
       initCinematicScroll();
@@ -40,12 +43,29 @@ const ScrollToTop = () => {
       const mainContent = document.querySelector('main');
       if (mainContent) {
         mainContent.classList.add('fade-in-up');
+        
+        // Add staggered animation to sections
+        const sections = mainContent.querySelectorAll('section');
+        sections.forEach((section, index) => {
+          section.style.animationDelay = `${0.1 * (index + 1)}s`;
+          section.classList.add('animate-fade-in');
+        });
       }
       
       // Add animated class to all adinkra symbols
-      document.querySelectorAll('.adinkra-symbol').forEach(symbol => {
+      document.querySelectorAll('.adinkra-symbol').forEach((symbol, index) => {
         symbol.classList.add('animate-fade-in');
+        (symbol as HTMLElement).style.animationDelay = `${0.05 * (index % 10)}s`;
       });
+      
+      // Ensure all pages have adinkra background
+      document.querySelectorAll('main, section').forEach(element => {
+        if (!element.classList.contains('adinkra-bg')) {
+          element.classList.add('adinkra-bg');
+        }
+      });
+      
+      document.body.classList.remove('page-transition');
     }, 100);
   }, [location]);
   

@@ -8,14 +8,16 @@ interface AdinkraBackgroundProps {
   opacity?: number;
   animated?: boolean;
   cinematicEffect?: 'rotate' | 'pulse' | 'float' | 'none';
+  size?: number;
 }
 
 const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
-  symbol = 'nyameNti',
-  density = 0.5,
-  opacity = 0.2, // Increased default opacity for better visibility
+  symbol = 'random',
+  density = 0.3, // Lower density for better performance
+  opacity = 0.15, // Lower default opacity for subtlety
   animated = true,
-  cinematicEffect = 'float'
+  cinematicEffect = 'float',
+  size = 80 // Smaller default size
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +31,7 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
     container.innerHTML = '';
     
     // Calculate number of symbols based on density
-    const symbolSize = 120; // Increased from 100 for better visibility
+    const symbolSize = size;
     const spacing = symbolSize * (2 - density);
     
     const columns = Math.ceil(width / spacing);
@@ -38,21 +40,27 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
     // Create and position symbols
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
+        // Add randomness to symbol placement
+        if (Math.random() > density) continue;
+        
         const wrapper = document.createElement('div');
         wrapper.style.position = 'absolute';
         wrapper.style.left = `${j * spacing + (Math.random() * spacing * 0.4)}px`;
         wrapper.style.top = `${i * spacing + (Math.random() * spacing * 0.4)}px`;
         wrapper.style.width = `${symbolSize}px`;
         wrapper.style.height = `${symbolSize}px`;
-        wrapper.style.opacity = `${opacity}`;
-        wrapper.style.color = 'var(--royal-gold)'; // Ensure consistent gold color
-        wrapper.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.7 + Math.random() * 0.6})`;
+        wrapper.style.opacity = `${opacity * (0.7 + Math.random() * 0.5)}`; // Varied opacity
+        wrapper.style.color = 'var(--royal-gold)';
+        wrapper.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.7 + Math.random() * 0.4})`;
         wrapper.style.transition = 'transform 1s ease-in-out, opacity 0.5s ease-in-out';
         wrapper.classList.add('adinkra-symbol');
+        wrapper.setAttribute('data-parallax', '');
+        wrapper.setAttribute('data-speed', `${0.02 + Math.random() * 0.1}`);
+        wrapper.setAttribute('data-direction', 'combined');
         
         // Apply cinematic animation based on effect type
         if (animated) {
-          const animDuration = 10 + Math.random() * 20;
+          const animDuration = 10 + Math.random() * 15; // Less variance for subtlety
           
           switch(cinematicEffect) {
             case 'rotate':
@@ -82,7 +90,7 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
     
     // Add interactive animation for hover and scroll effects
     if (animated) {
-      // Mouse movement effect
+      // Mouse movement effect - more subtle
       container.addEventListener('mousemove', (e) => {
         const mouseX = e.clientX;
         const mouseY = e.clientY;
@@ -93,47 +101,14 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
           const centerX = rect.left + rect.width / 2;
           const centerY = rect.top + rect.height / 2;
           
-          const distanceX = (mouseX - centerX) / 20;
-          const distanceY = (mouseY - centerY) / 20;
+          const distanceX = (mouseX - centerX) / 30; // Reduced sensitivity
+          const distanceY = (mouseY - centerY) / 30;
           const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
           
-          if (distance < 15) { // Increased interaction radius
-            el.style.transform = `translateX(${distanceX}px) translateY(${distanceY}px) rotate(${Math.random() * 360}deg) scale(1.5)`;
-            el.style.opacity = '0.8'; // Increased opacity for better interaction feedback
+          if (distance < 10) { // Smaller interaction radius
+            el.style.transform = `translateX(${distanceX}px) translateY(${distanceY}px) rotate(${Math.random() * 360}deg) scale(1.2)`;
+            el.style.opacity = `${opacity * 2}`; // Boosted opacity but still subtle
             el.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
-          }
-        });
-      });
-      
-      container.addEventListener('mouseleave', () => {
-        Array.from(container.children).forEach((element) => {
-          const el = element as HTMLElement;
-          el.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.7 + Math.random() * 0.6})`;
-          el.style.opacity = `${opacity}`;
-          el.style.transition = 'transform 1s ease-in-out, opacity 0.5s ease-in-out';
-        });
-      });
-      
-      // Scroll effect for cinematic feel
-      window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        
-        Array.from(container.children).forEach((element, index) => {
-          const el = element as HTMLElement;
-          
-          // Create differential movement based on symbol position
-          const rowPosition = Math.floor(index / columns);
-          const scrollSpeed = 0.05 + (rowPosition % 3) * 0.02;
-          
-          // Different effects based on position
-          if (index % 4 === 0) {
-            el.style.transform = `translateY(${scrollY * scrollSpeed}px) rotate(${scrollY * 0.02}deg)`;
-          } else if (index % 4 === 1) {
-            el.style.transform = `translateY(${-scrollY * scrollSpeed}px) rotate(${-scrollY * 0.02}deg)`;
-          } else if (index % 4 === 2) {
-            el.style.transform = `translateX(${scrollY * scrollSpeed}px) scale(${1 + scrollY * 0.0005})`;
-          } else {
-            el.style.transform = `translateX(${-scrollY * scrollSpeed}px) scale(${1 - scrollY * 0.0003})`;
           }
         });
       });
@@ -145,9 +120,8 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
       // Clean up event listeners
       container.removeEventListener('mousemove', () => {});
       container.removeEventListener('mouseleave', () => {});
-      window.removeEventListener('scroll', () => {});
     };
-  }, [symbol, density, opacity, animated, cinematicEffect]);
+  }, [symbol, density, opacity, animated, cinematicEffect, size]);
 
   return (
     <div 

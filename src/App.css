@@ -5,7 +5,7 @@
 @import './styles/components.css';
 @import './styles/layout.css';
 
-/* Body styling for Adinkra background pattern */
+/* Body styling for Adinkra background pattern - smaller, more subtle symbols */
 body::before {
   content: "";
   position: fixed;
@@ -14,22 +14,25 @@ body::before {
   width: 100vw;
   height: 100vh;
   background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cpath fill="%23FFD700" d="M50,10 L90,50 L50,90 L10,50 Z M50,30 L70,50 L50,70 L30,50 Z"%3E%3C/path%3E%3C/svg%3E');
-  background-size: var(--adinkra-scale);
+  background-size: 80px; /* Smaller symbols */
   background-repeat: repeat;
-  opacity: 0.12; /* Increased from 0.08 for better visibility */
+  opacity: 0.12; /* Subtle opacity */
   z-index: -1;
   pointer-events: none;
+  transform-origin: center;
+  animation: slowRotate 240s linear infinite; /* Very slow rotation for subtle movement */
 }
 
 /* Add responsive behavior to Adinkra symbols */
 @media (max-width: 768px) {
   :root {
-    --adinkra-scale: 80px;
-    --adinkra-opacity: 0.15;
+    --adinkra-scale: 60px; /* Even smaller on mobile */
+    --adinkra-opacity: 0.12;
   }
   
   body::before {
-    opacity: 0.1;
+    opacity: 0.08;
+    background-size: 60px;
   }
 }
 
@@ -40,6 +43,62 @@ body::before {
   }
   
   :root {
-    --adinkra-opacity: 0.3;
+    --adinkra-opacity: 0.25;
   }
+}
+
+/* Slow rotation animation for subtle movement */
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Enhanced cinematic page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s var(--scroll-ease), transform 0.6s var(--scroll-ease);
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.4s var(--scroll-ease), transform 0.4s var(--scroll-ease);
+}
+
+/* Global immersive scroll effects */
+main, section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Depth of field effect based on scroll position */
+.depth-of-field {
+  filter: blur(calc(var(--scroll-depth, 0) * 5px));
+  transition: filter 0.3s ease-out;
+}
+
+/* Focus highlight for scroll targets */
+.focus-highlight {
+  animation: focusPulse 0.8s ease-out;
+}
+
+@keyframes focusPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+  50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+}
+
+/* Smooth motion for all animations */
+* {
+  transition-timing-function: var(--scroll-ease, cubic-bezier(0.23, 1, 0.32, 1));
 }

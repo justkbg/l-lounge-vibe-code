@@ -27,6 +27,12 @@ export const initCinematicScroll = () => {
         } else if (rect.right > windowWidth * 0.7) {
           entry.target.classList.add('from-right');
         }
+        
+        // Trigger any staggered animations within the revealed element
+        const staggeredElements = entry.target.querySelectorAll('.staggered-fade');
+        staggeredElements.forEach(el => {
+          el.classList.add('animate');
+        });
       }
     });
   };
@@ -43,7 +49,7 @@ export const initCinematicScroll = () => {
     revealObserver.observe(el);
   });
   
-  // Add smooth scrolling to all anchor links
+  // Add smooth scrolling to all anchor links with enhanced physics
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       e.preventDefault();
@@ -58,26 +64,30 @@ export const initCinematicScroll = () => {
       const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
       const startPosition = window.scrollY;
       const distance = elementPosition - startPosition;
-      const duration = 1000; // ms
+      const duration = 1200; // ms - more cinematic
       let startTime: number | null = null;
       
-      // Easing function
-      const easeInOutCubic = (t: number) => {
-        return t < 0.5 
-          ? 4 * t * t * t 
-          : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+      // Improved easing function for more cinematic feel
+      const easeOutQuart = (t: number) => {
+        return 1 - Math.pow(1 - t, 4);
       };
 
       function animation(currentTime: number) {
         if (startTime === null) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const easing = easeInOutCubic(progress);
+        const easing = easeOutQuart(progress);
         
         window.scrollTo(0, startPosition + distance * easing);
         
         if (timeElapsed < duration) {
           requestAnimationFrame(animation);
+        } else {
+          // Add focus class to target for emphasis
+          targetElement.classList.add('focus-highlight');
+          setTimeout(() => {
+            targetElement.classList.remove('focus-highlight');
+          }, 800);
         }
       }
       
@@ -85,72 +95,129 @@ export const initCinematicScroll = () => {
     });
   });
   
-  // Enhanced parallax effect
-  const parallaxElements = document.querySelectorAll('.parallax-bg, .parallax-element');
+  // Enhanced parallax effect with more immersive depth
+  const parallaxElements = document.querySelectorAll('[data-parallax]');
   
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     
     parallaxElements.forEach((element: Element) => {
       const el = element as HTMLElement;
-      const speed = el.dataset.speed || '0.5';
+      const speed = el.dataset.speed || '0.3';
       const direction = el.dataset.direction || 'vertical';
+      const scale = el.dataset.scale || '1';
+      const rotation = el.dataset.rotation || '0';
       
+      // Calculate the visual effect
       if (direction === 'vertical') {
         const yPos = scrollY * parseFloat(speed);
-        el.style.transform = `translateY(${yPos}px)`;
+        el.style.transform = `translateY(${yPos}px) scale(${scale}) rotate(${rotation}deg)`;
       } else if (direction === 'horizontal') {
         const xPos = scrollY * parseFloat(speed);
-        el.style.transform = `translateX(${xPos}px)`;
+        el.style.transform = `translateX(${xPos}px) scale(${scale}) rotate(${rotation}deg)`;
       } else if (direction === 'rotate') {
         const rotation = scrollY * parseFloat(speed) * 0.05;
-        el.style.transform = `rotate(${rotation}deg)`;
+        el.style.transform = `rotate(${rotation}deg) scale(${scale})`;
       } else if (direction === 'scale') {
-        const baseScale = 1;
+        const baseScale = parseFloat(scale);
         const scaleChange = scrollY * parseFloat(speed) * 0.001;
         const newScale = baseScale + scaleChange;
         el.style.transform = `scale(${newScale})`;
+      } else if (direction === 'combined') {
+        // New combined effect for really immersive movement
+        const yPos = scrollY * parseFloat(speed) * 0.5;
+        const xPos = Math.sin(scrollY * 0.01) * 20 * parseFloat(speed);
+        const rotationAmount = scrollY * parseFloat(speed) * 0.02;
+        el.style.transform = `translate(${xPos}px, ${yPos}px) rotate(${rotationAmount}deg) scale(${scale})`;
       }
     });
     
     // Add subtle rotation to adinkra symbols based on scroll
-    const adinkraElements = document.querySelectorAll('.adinkra-bg::before');
+    const adinkraElements = document.querySelectorAll('.adinkra-symbol');
     adinkraElements.forEach((element: Element) => {
       const el = element as HTMLElement;
-      const rotation = scrollY * 0.03;
+      const rotation = scrollY * 0.02;
       el.style.transform = `rotate(${rotation}deg)`;
     });
+    
+    // Add depth-of-field effect based on scroll position
+    document.body.style.setProperty('--scroll-depth', `${Math.min(scrollY / 1000, 1)}`);
   });
   
-  // Add cursor trail effect
-  let trailElements: HTMLElement[] = [];
-  const maxTrails = 5;
-  
-  for (let i = 0; i < maxTrails; i++) {
-    const trail = document.createElement('div');
-    trail.className = 'cursor-trail';
-    trail.style.opacity = `${1 - (i * 0.2)}`;
-    trail.style.width = `${10 - (i * 1.5)}px`;
-    trail.style.height = `${10 - (i * 1.5)}px`;
-    document.body.appendChild(trail);
-    trailElements.push(trail);
-  }
-  
-  document.addEventListener('mousemove', (e) => {
-    // Update the position of all trail elements with delay
-    setTimeout(() => {
-      trailElements.forEach((trail, index) => {
-        trail.style.opacity = '0.7';
-        trail.style.left = `${e.clientX}px`;
-        trail.style.top = `${e.clientY}px`;
-        
-        // Hide trail after a delay
-        setTimeout(() => {
-          trail.style.opacity = '0';
-        }, 100 * index);
+  // Add cinematic cursor effects
+  const cursorEffects = () => {
+    let trailElements: HTMLElement[] = [];
+    const maxTrails = 5;
+    
+    // Create trail elements
+    for (let i = 0; i < maxTrails; i++) {
+      const trail = document.createElement('div');
+      trail.className = 'cursor-trail';
+      trail.style.opacity = `${1 - (i * 0.2)}`;
+      trail.style.width = `${10 - (i * 1.5)}px`;
+      trail.style.height = `${10 - (i * 1.5)}px`;
+      document.body.appendChild(trail);
+      trailElements.push(trail);
+    }
+    
+    // Track mouse movement
+    document.addEventListener('mousemove', (e) => {
+      // Update cursor glows
+      document.querySelectorAll('.cursor-glow').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        el.style.setProperty('--x', `${x}%`);
+        el.style.setProperty('--y', `${y}%`);
       });
-    }, 50); // slight delay for trailing effect
-  });
+      
+      // Update the position of all trail elements with delay
+      setTimeout(() => {
+        trailElements.forEach((trail, index) => {
+          trail.style.opacity = '0.7';
+          trail.style.left = `${e.clientX}px`;
+          trail.style.top = `${e.clientY}px`;
+          
+          // Hide trail after a delay
+          setTimeout(() => {
+            trail.style.opacity = '0';
+          }, 100 * index);
+        });
+      }, 50); // slight delay for trailing effect
+    });
+  };
+  
+  cursorEffects();
+  
+  // Add Adinkra symbols to all pages if they don't have them
+  const addAdinkraToPages = () => {
+    const pageContainers = document.querySelectorAll('main, section');
+    pageContainers.forEach(container => {
+      if (!container.classList.contains('adinkra-bg') && !container.querySelector('.adinkra-bg')) {
+        container.classList.add('adinkra-bg');
+      }
+    });
+  };
+  
+  addAdinkraToPages();
+  
+  // Add subtle ambient movement to Adinkra symbols
+  const animateAdinkraSymbols = () => {
+    const adinkraElements = document.querySelectorAll('.adinkra-symbol');
+    
+    adinkraElements.forEach((element, index) => {
+      const el = element as HTMLElement;
+      // Create unique animation pattern for each symbol
+      const delay = index * 0.2;
+      const duration = 10 + (index % 5) * 2;
+      const amplitude = 5 + (index % 3) * 2;
+      
+      el.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+      el.style.animationDirection = index % 2 === 0 ? 'alternate' : 'alternate-reverse';
+    });
+  };
+  
+  animateAdinkraSymbols();
 };
 
 // Auto-initialize when imported
@@ -160,3 +227,6 @@ if (typeof window !== 'undefined') {
   // Re-initialize on route changes for single-page applications
   window.addEventListener('popstate', initCinematicScroll);
 }
+
+// Expose the function for manual triggering
+export default initCinematicScroll;

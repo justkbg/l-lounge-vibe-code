@@ -1,10 +1,10 @@
 
 :root {
-  /* Adinkra symbol configuration */
-  --adinkra-opacity: 0.25;  /* Increased from 0.2 for better visibility */
-  --adinkra-scale: 120px;   /* Increased from 100px for better visibility */
+  /* Adinkra symbol configuration - smaller and more visible */
+  --adinkra-opacity: 0.18;  /* Reduced for better subtlety */
+  --adinkra-scale: 80px;   /* Smaller symbols for better distribution */
   --adinkra-rotation: 0deg;
-  --adinkra-spacing: 180px; /* Increased from 150px for better spacing */
+  --adinkra-spacing: 120px; /* Reduced spacing for more symbols */
   
   /* L-Lounge color palette */
   --midnight-black: #0B0B0F;
@@ -18,19 +18,26 @@
   
   /* Glassmorphism */
   --glass-bg: rgba(31, 31, 42, 0.7);
-  --glass-border: rgba(255, 215, 0, 0.15); /* Increased from 0.1 for better visibility */
-  --glass-blur: 10px; /* Increased from 8px for better effect */
+  --glass-border: rgba(255, 215, 0, 0.15);
+  --glass-blur: 10px;
   
   /* Animation timings */
   --animation-slow: 0.8s;
   --animation-medium: 0.5s;
   --animation-fast: 0.3s;
+  
+  /* Cinematic scroll variables */
+  --scroll-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --scroll-duration: 1.2s;
+  --reveal-offset: 30px;
+  --perspective-strength: 1000px;
+  --parallax-depth: 0.2;
 }
 
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   :root {
-    --adinkra-opacity: 0.3; /* Increased for better visibility in dark mode */
+    --adinkra-opacity: 0.22; /* Slightly increased for dark mode */
   }
 }
 
@@ -45,11 +52,19 @@
   to { transform: rotate(360deg); }
 }
 
-/* Cinematic smooth scrolling */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.5); }
+}
+
+/* Enhanced smooth scrolling */
 html {
   scroll-behavior: smooth;
   /* For Safari and other browsers */
   -webkit-overflow-scrolling: touch;
+  
+  /* Add smooth scrolling with custom bezier curve */
+  scroll-behavior: smooth;
 }
 
 /* Add a CSS class to apply to elements that should display Adinkra symbols */
@@ -61,4 +76,36 @@ html {
   opacity: var(--adinkra-opacity);
   background-size: var(--adinkra-scale);
   pointer-events: none;
+}
+
+/* Enhanced parallax containers */
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Page transition animations */
+.fade-in-up {
+  animation: fadeInUp var(--animation-medium) var(--scroll-ease);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced cinematic reveal */
+.cinematic-reveal {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  transition: clip-path var(--scroll-duration) var(--scroll-ease);
+}
+
+.cinematic-reveal.visible {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
