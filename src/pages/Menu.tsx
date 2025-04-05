@@ -1,9 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import AdinkraBackground from '@/components/3d/AdinkraBackground';
+import { toast } from '@/components/ui/use-toast';
 
 interface MenuItem {
   id: number;
@@ -137,14 +139,64 @@ const menuData = {
   ]
 };
 
+// Fallback images for when primary images fail to load
+const fallbackImages = [
+  "https://images.unsplash.com/photo-1547595468-fdb5de8a07d6?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1575023782549-62ca0d244b39?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1486947799489-3fabdd7d32a6?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop"
+];
+
 const MenuItem: React.FC<{ item: MenuItem }> = ({ item }) => {
+  const [imageError, setImageError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  // Get a deterministic fallback image based on the item name
+  const getFallbackImage = () => {
+    const index = item.name.length % fallbackImages.length;
+    return fallbackImages[index];
+  };
+  
+  useEffect(() => {
+    // Preload the image
+    const img = new Image();
+    img.src = item.image;
+    
+    img.onload = () => {
+      setIsLoaded(true);
+    };
+    
+    img.onerror = () => {
+      console.log(`Failed to load image: ${item.image}, using fallback`);
+      setImageError(true);
+      
+      // Try with fallback
+      const fallbackImg = new Image();
+      fallbackImg.src = getFallbackImage();
+      
+      fallbackImg.onload = () => {
+        setIsLoaded(true);
+      };
+    };
+    
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [item.image]);
+
   return (
     <Card className="overflow-hidden border-border hover:border-primary transition-colors duration-300 group">
       <div className="relative h-48 overflow-hidden">
+        {!isLoaded && (
+          <div className="absolute inset-0 bg-card animate-pulse rounded-t-lg" />
+        )}
         <img 
-          src={item.image} 
+          src={imageError ? getFallbackImage() : item.image} 
           alt={item.name} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onError={() => setImageError(true)}
+          loading="lazy"
         />
         {item.tags && item.tags.length > 0 && (
           <div className="absolute top-2 right-2 flex flex-wrap gap-1 justify-end">
@@ -182,11 +234,33 @@ const MenuSection: React.FC<{ items: MenuItem[] }> = ({ items }) => {
 
 const Menu = () => {
   const [activeTab, setActiveTab] = useState("drinks");
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Inform user when all assets are loaded
+    const timer = setTimeout(() => {
+      setAssetsLoaded(true);
+      toast({
+        title: "Ready to explore our menu",
+        description: "All images and assets have been loaded.",
+      });
+    }, 2000);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
       <Navbar />
-      <main className="pt-24 pb-20">
+      <main className="pt-24 pb-20 relative">
+        {/* Add Adinkra background with higher opacity */}
+        <AdinkraBackground 
+          symbol="random" 
+          density={0.4} 
+          opacity={0.08} 
+          animated={true} 
+        />
+        
         <div className="container-custom">
           <div className="text-center mb-16">
             <h1 className="section-title animate-fade-in">Our Menu</h1>

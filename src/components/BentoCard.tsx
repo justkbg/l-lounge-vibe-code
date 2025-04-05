@@ -126,23 +126,22 @@ const BentoCard = ({
             isLoaded ? "opacity-100" : "opacity-0"
           )}
           onError={() => setImageError(true)}
+          loading="lazy"
           style={{ transition: 'transform 0.5s ease, opacity 0.5s ease' }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
         
-        {/* Adinkra Symbol Overlay */}
-        <div className="absolute inset-0 opacity-5 adinkra-pattern"></div>
-
-        {/* Ghanaian pattern background - Directly embed SVG for better reliability */}
+        {/* Adinkra Symbol Overlay - Make it more visible */}
         <div 
-          className="absolute inset-0 opacity-10" 
+          className="absolute inset-0" 
           style={{ 
             backgroundImage: `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(symbolSvg)}")`,
             backgroundSize: '80px',
             backgroundRepeat: 'repeat',
             transform: isHovered ? 'rotate(5deg) scale(1.1)' : 'rotate(0deg) scale(1)',
             transition: 'transform 0.5s ease',
-            mixBlendMode: 'overlay'
+            mixBlendMode: 'overlay',
+            opacity: 0.15
           }}
         ></div>
       </div>
@@ -162,7 +161,6 @@ const BentoCard = ({
         {isHovered && (
           <>
             <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-r from-[#FF3D00] to-[#FBC02D] opacity-70 animate-pulse" />
-            {/* Directly render the SVG for the symbol instead of using dangerouslySetInnerHTML */}
             <div 
               className="absolute bottom-4 left-4 w-8 h-8 opacity-80"
               dangerouslySetInnerHTML={{ __html: symbolSvg }}

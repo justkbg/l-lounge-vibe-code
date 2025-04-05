@@ -1,8 +1,8 @@
 
 :root {
   /* Adinkra symbol configuration */
-  --adinkra-opacity: 0.1;  /* Increased from 0.05 for better visibility */
-  --adinkra-scale: 60px;
+  --adinkra-opacity: 0.15;  /* Increased from 0.1 for better visibility */
+  --adinkra-scale: 80px;    /* Increased from 60px for better visibility */
   --adinkra-rotation: 0deg;
   --adinkra-spacing: 120px;
   
@@ -30,7 +30,7 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   :root {
-    --adinkra-opacity: 0.15; /* Increased for better visibility in dark mode */
+    --adinkra-opacity: 0.2; /* Increased for better visibility in dark mode */
   }
 }
 
@@ -53,5 +53,21 @@
   z-index: 0;
   opacity: var(--adinkra-opacity);
   background-size: var(--adinkra-scale);
+  pointer-events: none;
+}
+
+/* Add global Adinkra background pattern to the body */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cpath fill="%23FFD700" d="M50,10 L90,50 L50,90 L10,50 Z M50,30 L70,50 L50,70 L30,50 Z"%3E%3C/path%3E%3C/svg%3E');
+  background-size: 120px;
+  background-repeat: repeat;
+  opacity: 0.05;
+  z-index: -1;
   pointer-events: none;
 }

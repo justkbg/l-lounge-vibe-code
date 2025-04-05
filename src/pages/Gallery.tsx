@@ -1,8 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import AdinkraBackground from '@/components/3d/AdinkraBackground';
+import { toast } from '@/components/ui/use-toast';
 
 interface GalleryImage {
   id: number;
@@ -86,6 +88,20 @@ const galleryImages: GalleryImage[] = [
   }
 ];
 
+// Fallback images array
+const fallbackImages = [
+  "https://images.unsplash.com/photo-1590452224879-867e8012a828?q=80&w=1740&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=1736&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1544637378-a0ddf15e73c0?q=80&w=1740&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1508615070457-7baeba4003ab?q=80&w=1740&auto=format&fit=crop"
+];
+
+// Helper function to get a fallback image
+const getFallbackImage = (title: string) => {
+  const index = title.length % fallbackImages.length;
+  return fallbackImages[index];
+};
+
 interface ImageModalProps {
   image: GalleryImage | null;
   isOpen: boolean;
@@ -93,6 +109,8 @@ interface ImageModalProps {
 }
 
 const ImageModal: React.FC<ImageModalProps> = ({ image, isOpen, onClose }) => {
+  const [imageError, setImageError] = useState(false);
+
   if (!image) return null;
 
   return (
@@ -100,9 +118,10 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, isOpen, onClose }) => {
       <DialogContent className="max-w-4xl p-0 overflow-hidden">
         <div className="relative">
           <img 
-            src={image.image} 
+            src={imageError ? getFallbackImage(image.title) : image.image} 
             alt={image.title} 
             className="w-full h-full object-contain"
+            onError={() => setImageError(true)}
           />
           <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
             <h3 className="text-xl font-playfair font-bold text-primary">{image.title}</h3>
@@ -118,6 +137,7 @@ const Gallery = () => {
   const [filter, setFilter] = useState<string>("all");
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [imagesLoaded, setImagesLoaded] = useState(0);
 
   const categories = [
     { id: "all", name: "All" },
@@ -140,10 +160,48 @@ const Gallery = () => {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    // Preload all images
+    galleryImages.forEach((image) => {
+      const img = new Image();
+      img.src = image.image;
+      
+      img.onload = () => {
+        setImagesLoaded(prev => prev + 1);
+      };
+      
+      img.onerror = () => {
+        // Try with fallback
+        const fallbackImg = new Image();
+        fallbackImg.src = getFallbackImage(image.title);
+        
+        fallbackImg.onload = () => {
+          setImagesLoaded(prev => prev + 1);
+        };
+      };
+    });
+    
+    // Let the user know when images are loaded
+    if (imagesLoaded === galleryImages.length) {
+      toast({
+        title: "Gallery loaded",
+        description: "All images have been successfully loaded.",
+      });
+    }
+  }, [imagesLoaded]);
+
   return (
     <>
       <Navbar />
-      <main className="pt-24 pb-20">
+      <main className="pt-24 pb-20 relative">
+        {/* Add Adinkra background with animation */}
+        <AdinkraBackground 
+          symbol="random" 
+          density={0.3} 
+          opacity={0.08} 
+          animated={true} 
+        />
+        
         <div className="container-custom">
           <div className="text-center mb-16">
             <h1 className="section-title animate-fade-in">Our Gallery</h1>
@@ -169,26 +227,32 @@ const Gallery = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredImages.map((image, index) => (
-              <div 
-                key={image.id} 
-                className="aspect-square rounded-xl overflow-hidden cursor-pointer group animate-fade-in"
-                style={{ animationDelay: `${0.1 * (index % 6)}s` }}
-                onClick={() => openModal(image)}
-              >
-                <div className="relative h-full">
-                  <img 
-                    src={image.image} 
-                    alt={image.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <h3 className="text-xl font-playfair font-bold text-primary">{image.title}</h3>
-                    <p className="text-white text-sm mt-1">Click to view</p>
+            {filteredImages.map((image, index) => {
+              const [itemImageError, setItemImageError] = useState(false);
+              
+              return (
+                <div 
+                  key={image.id} 
+                  className="aspect-square rounded-xl overflow-hidden cursor-pointer group animate-fade-in"
+                  style={{ animationDelay: `${0.1 * (index % 6)}s` }}
+                  onClick={() => openModal(image)}
+                >
+                  <div className="relative h-full">
+                    <img 
+                      src={itemImageError ? getFallbackImage(image.title) : image.image} 
+                      alt={image.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      onError={() => setItemImageError(true)}
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                      <h3 className="text-xl font-playfair font-bold text-primary">{image.title}</h3>
+                      <p className="text-white text-sm mt-1">Click to view</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </main>

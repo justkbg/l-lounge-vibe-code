@@ -12,7 +12,7 @@ interface AdinkraBackgroundProps {
 const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
   symbol = 'nyameNti',
   density = 0.5,
-  opacity = 0.05,
+  opacity = 0.1,
   animated = true
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,7 +27,7 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
     container.innerHTML = '';
     
     // Calculate number of symbols based on density
-    const symbolSize = 60; // Using a fixed value instead of CSS variable to ensure consistency
+    const symbolSize = 80; // Increased from 60 for better visibility
     const spacing = symbolSize * (2 - density);
     
     const columns = Math.ceil(width / spacing);
@@ -105,7 +105,10 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
     <div 
       ref={containerRef} 
       className="absolute inset-0 overflow-hidden pointer-events-none z-0"
-      style={{ mixBlendMode: 'overlay' }}
+      style={{ 
+        mixBlendMode: 'overlay',
+        color: 'var(--royal-gold)'  // Set default color to gold for better visibility
+      }}
     />
   );
 };
