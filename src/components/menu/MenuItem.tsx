@@ -12,12 +12,12 @@ export interface MenuItem {
   tags?: string[];
 }
 
-// Fallback images for when primary images fail to load
+// Fallback images for when primary images fail to load - using more reliable URLs
 const fallbackImages = [
-  "https://images.unsplash.com/photo-1547595468-fdb5de8a07d6?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1575023782549-62ca0d244b39?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1486947799489-3fabdd7d32a6?q=80&w=1000&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop"
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1546241072-48010ad2862c?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1000&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1000&auto=format&fit=crop"
 ];
 
 interface MenuItemProps {
@@ -63,7 +63,7 @@ const MenuItemComponent: React.FC<MenuItemProps> = ({ item }) => {
   }, [item.image]);
 
   return (
-    <Card className="overflow-hidden border-border hover:border-primary transition-colors duration-300 group">
+    <Card className="overflow-hidden border-border hover:border-primary transition-colors duration-300 group hover:translate-y-[-5px] hover:shadow-xl transform transition-all">
       <div className="relative h-48 overflow-hidden">
         {!isLoaded && (
           <div className="absolute inset-0 bg-card animate-pulse rounded-t-lg" />

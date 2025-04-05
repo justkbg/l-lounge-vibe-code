@@ -12,7 +12,7 @@ interface AdinkraBackgroundProps {
 const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
   symbol = 'nyameNti',
   density = 0.5,
-  opacity = 0.1,
+  opacity = 0.15, // Increased default opacity
   animated = true
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,7 +27,7 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
     container.innerHTML = '';
     
     // Calculate number of symbols based on density
-    const symbolSize = 80; // Increased from 60 for better visibility
+    const symbolSize = 100; // Increased from 80 for better visibility
     const spacing = symbolSize * (2 - density);
     
     const columns = Math.ceil(width / spacing);
@@ -43,7 +43,7 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
         wrapper.style.width = `${symbolSize}px`;
         wrapper.style.height = `${symbolSize}px`;
         wrapper.style.opacity = `${opacity}`;
-        wrapper.style.color = 'currentColor';
+        wrapper.style.color = 'var(--royal-gold)'; // Ensure consistent gold color
         wrapper.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.7 + Math.random() * 0.6})`;
         wrapper.style.transition = 'transform 1s ease-in-out';
         
@@ -82,7 +82,7 @@ const AdinkraBackground: React.FC<AdinkraBackgroundProps> = ({
           
           if (distance < 10) {
             el.style.transform = `translateX(${distanceX}px) translateY(${distanceY}px) rotate(${Math.random() * 360}deg) scale(1.2)`;
-            el.style.opacity = '0.3';
+            el.style.opacity = '0.5'; // Increased from 0.3 for better visibility
           }
         });
       });

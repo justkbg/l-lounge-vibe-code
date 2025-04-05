@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -13,6 +13,7 @@ interface GalleryImage {
   image: string;
 }
 
+// Updated image paths with more reliable URLs
 const galleryImages: GalleryImage[] = [
   {
     id: 1,
@@ -60,7 +61,7 @@ const galleryImages: GalleryImage[] = [
     id: 8,
     title: "Outdoor Terrace",
     category: "interior",
-    image: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
+    image: "https://images.unsplash.com/photo-1582037928769-181cf6ea3d9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
   },
   {
     id: 9,
@@ -88,12 +89,12 @@ const galleryImages: GalleryImage[] = [
   }
 ];
 
-// Fallback images array
+// Updated fallback images array with more reliable URLs
 const fallbackImages = [
   "https://images.unsplash.com/photo-1590452224879-867e8012a828?q=80&w=1740&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1527661591475-527312dd65f5?q=80&w=1736&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1544637378-a0ddf15e73c0?q=80&w=1740&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1508615070457-7baeba4003ab?q=80&w=1740&auto=format&fit=crop"
+  "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1740&auto=format&fit=crop"
 ];
 
 // Helper function to get a fallback image
@@ -138,6 +139,36 @@ const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [imagesLoaded, setImagesLoaded] = useState(0);
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  // Add cinematic scroll appearance for gallery items
+  const useScrollReveal = () => {
+    useEffect(() => {
+      const elements = document.querySelectorAll('.gallery-item');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in');
+            entry.target.classList.add('opacity-100');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      elements.forEach((el) => {
+        el.classList.add('opacity-0');
+        observer.observe(el);
+      });
+      
+      return () => {
+        elements.forEach((el) => observer.unobserve(el));
+      };
+    }, [filter]); // Re-run when filter changes
+  };
+  
+  // Initialize scroll reveal
+  useScrollReveal();
 
   const categories = [
     { id: "all", name: "All" },
@@ -161,48 +192,80 @@ const Gallery = () => {
   };
 
   useEffect(() => {
-    // Preload all images
+    // Preload all images with improved error handling
+    let loadedCount = 0;
+    
     galleryImages.forEach((image) => {
       const img = new Image();
       img.src = image.image;
       
       img.onload = () => {
-        setImagesLoaded(prev => prev + 1);
+        loadedCount++;
+        setImagesLoaded(loadedCount);
+        
+        if (loadedCount === galleryImages.length) {
+          toast({
+            title: "Gallery loaded",
+            description: "All images have been successfully loaded.",
+          });
+        }
       };
       
       img.onerror = () => {
+        console.log(`Failed to load image: ${image.image}, using fallback`);
         // Try with fallback
         const fallbackImg = new Image();
         fallbackImg.src = getFallbackImage(image.title);
         
         fallbackImg.onload = () => {
-          setImagesLoaded(prev => prev + 1);
+          loadedCount++;
+          setImagesLoaded(loadedCount);
+          
+          if (loadedCount === galleryImages.length) {
+            toast({
+              title: "Gallery loaded",
+              description: "All images have been successfully loaded.",
+            });
+          }
+        };
+        
+        fallbackImg.onerror = () => {
+          // Even fallback failed, but still count it as loaded
+          loadedCount++;
+          setImagesLoaded(loadedCount);
         };
       };
     });
     
-    // Let the user know when images are loaded
-    if (imagesLoaded === galleryImages.length) {
-      toast({
-        title: "Gallery loaded",
-        description: "All images have been successfully loaded.",
-      });
-    }
-  }, [imagesLoaded]);
+    // Fallback timer in case images take too long
+    const timer = setTimeout(() => {
+      if (imagesLoaded < galleryImages.length) {
+        toast({
+          title: "Gallery ready",
+          description: "You can now explore our gallery.",
+        });
+      }
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Enhanced cinematic animation classes
+  const pageEnterClasses = "animate-fade-in transition-all duration-700";
 
   return (
     <>
       <Navbar />
-      <main className="pt-24 pb-20 relative">
+      <main className={`pt-24 pb-20 relative ${pageEnterClasses}`} ref={galleryRef}>
         {/* Add Adinkra background with animation */}
         <AdinkraBackground 
           symbol="random" 
           density={0.3} 
-          opacity={0.08} 
+          opacity={0.15} 
           animated={true} 
         />
         
-        <div className="container-custom">
+        <div className="container-custom reveal-on-scroll">
           <div className="text-center mb-16">
             <h1 className="section-title animate-fade-in">Our Gallery</h1>
             <p className="section-subtitle animate-fade-in" style={{ animationDelay: '0.2s' }}>
@@ -210,8 +273,8 @@ const Gallery = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4 mb-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            {categories.map(category => (
+          <div className="flex flex-wrap justify-center gap-4 mb-12 animate-fade-in staggered-fade" style={{ animationDelay: '0.3s' }}>
+            {categories.map((category, index) => (
               <button
                 key={category.id}
                 onClick={() => setFilter(category.id)}
@@ -220,6 +283,7 @@ const Gallery = () => {
                     ? 'bg-primary text-primary-foreground' 
                     : 'bg-muted text-muted-foreground hover:bg-muted/80'
                 }`}
+                style={{ animationDelay: `${0.1 * (index + 3)}s` }}
               >
                 {category.name}
               </button>
@@ -233,7 +297,7 @@ const Gallery = () => {
               return (
                 <div 
                   key={image.id} 
-                  className="aspect-square rounded-xl overflow-hidden cursor-pointer group animate-fade-in"
+                  className="gallery-item aspect-square rounded-xl overflow-hidden cursor-pointer group transition-all duration-500"
                   style={{ animationDelay: `${0.1 * (index % 6)}s` }}
                   onClick={() => openModal(image)}
                 >

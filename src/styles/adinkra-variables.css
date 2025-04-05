@@ -1,10 +1,10 @@
 
 :root {
   /* Adinkra symbol configuration */
-  --adinkra-opacity: 0.15;  /* Increased from 0.1 for better visibility */
-  --adinkra-scale: 80px;    /* Increased from 60px for better visibility */
+  --adinkra-opacity: 0.2;  /* Increased from 0.15 for better visibility */
+  --adinkra-scale: 100px;   /* Increased from 80px for better visibility */
   --adinkra-rotation: 0deg;
-  --adinkra-spacing: 120px;
+  --adinkra-spacing: 150px; /* Increased from 120px for better spacing */
   
   /* L-Lounge color palette */
   --midnight-black: #0B0B0F;
@@ -30,7 +30,7 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   :root {
-    --adinkra-opacity: 0.2; /* Increased for better visibility in dark mode */
+    --adinkra-opacity: 0.25; /* Increased for better visibility in dark mode */
   }
 }
 
@@ -45,6 +45,13 @@
   to { transform: rotate(360deg); }
 }
 
+/* Cinematic smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  /* For Safari and other browsers */
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Add a CSS class to apply to elements that should display Adinkra symbols */
 .adinkra-bg::before {
   content: "";
@@ -56,7 +63,7 @@
   pointer-events: none;
 }
 
-/* Add global Adinkra background pattern to the body */
+/* Add global Adinkra background pattern to the body - with improved visibility */
 body::before {
   content: "";
   position: fixed;
@@ -65,9 +72,9 @@ body::before {
   width: 100vw;
   height: 100vh;
   background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cpath fill="%23FFD700" d="M50,10 L90,50 L50,90 L10,50 Z M50,30 L70,50 L50,70 L30,50 Z"%3E%3C/path%3E%3C/svg%3E');
-  background-size: 120px;
+  background-size: var(--adinkra-scale);
   background-repeat: repeat;
-  opacity: 0.05;
+  opacity: 0.08; /* Increased from 0.05 for better visibility */
   z-index: -1;
   pointer-events: none;
 }

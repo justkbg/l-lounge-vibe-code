@@ -1,9 +1,34 @@
-
 #root {
   max-width: 100%;
   margin: 0 auto;
   width: 100%;
   text-align: center;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .preserve-3d {
@@ -22,7 +47,6 @@
   perspective: 1000px;
 }
 
-/* Neo-Afro-Luxury Theme */
 .neo-glow {
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
   transition: box-shadow 0.3s ease;
@@ -90,7 +114,6 @@
   opacity: 1;
 }
 
-/* Z-Axis movement */
 .hover-float {
   transition: transform 0.3s ease;
 }
@@ -100,7 +123,6 @@
   transform-style: preserve-3d;
 }
 
-/* Animated background elements */
 .adinkra-bg {
   position: relative;
   overflow: hidden;
@@ -116,20 +138,19 @@
   background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cpath fill="%23FFD700" opacity="0.05" d="M50,10 L90,50 L50,90 L10,50 Z M50,30 L70,50 L50,70 L30,50 Z"%3E%3C/path%3E%3C/svg%3E');
   background-size: 120px;
   background-repeat: repeat;
-  opacity: 0.04;
+  opacity: 0.1;
   z-index: -1;
   animation: rotateBg 120s linear infinite;
 }
 
-/* Adinkra Pattern */
 .adinkra-pattern {
   background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 100 100"%3E%3Cpath fill="%23FFD700" d="M50 0 L100 50 L50 100 L0 50 Z M50 20 L80 50 L50 80 L20 50 Z"%3E%3C/path%3E%3C/svg%3E');
   background-size: 60px;
   background-repeat: repeat;
   mix-blend-mode: overlay;
+  opacity: 0.15;
 }
 
-/* Kente-inspired divider */
 .kente-divider {
   height: 8px;
   background: repeating-linear-gradient(
@@ -168,7 +189,6 @@
   right: -8px;
 }
 
-/* Animated Talking Drum */
 .talking-drum {
   width: 60px;
   height: 90px;
@@ -213,7 +233,6 @@
   }
 }
 
-/* Kinetic typing effect */
 .kinetic-text {
   display: inline-block;
   overflow: hidden;
@@ -226,7 +245,6 @@
   to { width: 100% }
 }
 
-/* Gold shimmer effect */
 .gold-shimmer {
   position: relative;
   overflow: hidden;
@@ -258,7 +276,6 @@
   }
 }
 
-/* Add Ghanaian 'Sankofa' symbol */
 .sankofa-symbol {
   position: relative;
   width: 40px;
@@ -276,7 +293,6 @@
   background-repeat: no-repeat;
 }
 
-/* Animated soundwave */
 .soundwave {
   display: flex;
   align-items: center;
@@ -306,7 +322,6 @@
   100% { transform: scaleY(1.2); }
 }
 
-/* New Animations for Afro-futuristic feel */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-15px); }
@@ -322,7 +337,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Cursor trail effect */
 .cursor-trail {
   position: fixed;
   width: 10px;
@@ -336,7 +350,6 @@
   transition: opacity 0.2s ease;
 }
 
-/* Ghana time clock */
 .ghana-time {
   font-family: 'Playfair Display', serif;
   font-size: 14px;
@@ -356,7 +369,6 @@
   animation: pulse-glow 2s infinite;
 }
 
-/* Preloading animation */
 .loading-adinkra {
   width: 60px;
   height: 60px;
@@ -366,7 +378,6 @@
   animation: spin 2s linear infinite, pulse-glow 1.5s infinite;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -385,7 +396,6 @@
   background: linear-gradient(to bottom, #FF9900, #FFD700);
 }
 
-/* Parallax scrolling */
 .parallax-container {
   overflow: hidden;
   position: relative;
@@ -412,7 +422,6 @@
   transform: translateZ(-25px) scale(1.125);
 }
 
-/* 3D Perspective effect for sections */
 .perspective-section {
   perspective: 1000px;
 }
@@ -426,13 +435,11 @@
   transform: translateZ(50px);
 }
 
-/* Futuristic focus outlines */
 button:focus, a:focus, input:focus, textarea:focus, select:focus {
   outline: none;
   box-shadow: 0 0 0 2px #FFD700, 0 0 0 4px rgba(255, 215, 0, 0.3);
 }
 
-/* Entrance animations */
 .fade-up {
   opacity: 0;
   transform: translateY(20px);
@@ -464,7 +471,6 @@ button:focus, a:focus, input:focus, textarea:focus, select:focus {
   }
 }
 
-/* Dynamic hover effect for buttons */
 .btn-hover-effect {
   position: relative;
   overflow: hidden;
@@ -486,3 +492,47 @@ button:focus, a:focus, input:focus, textarea:focus, select:focus {
 .btn-hover-effect:hover::before {
   left: 100%;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 800ms, transform 800ms;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.staggered-fade > *:nth-child(1) { animation-delay: 0.1s; }
+.staggered-fade > *:nth-child(2) { animation-delay: 0.2s; }
+.staggered-fade > *:nth-child(3) { animation-delay: 0.3s; }
+.staggered-fade > *:nth-child(4) { animation-delay: 0.4s; }
+.staggered-fade > *:nth-child(5) { animation-delay: 0.5s; }
+.staggered-fade > *:nth-child(6) { animation-delay: 0.6s; }
+.staggered-fade > *:nth-child(7) { animation-delay: 0.7s; }
+.staggered-fade > *:nth-child(8) { animation-delay: 0.8s; }

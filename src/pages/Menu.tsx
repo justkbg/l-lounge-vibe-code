@@ -11,28 +11,76 @@ const Menu = () => {
   const [activeTab, setActiveTab] = useState("drinks");
   const [assetsLoaded, setAssetsLoaded] = useState(false);
 
+  // Preload all menu images to avoid broken images
   useEffect(() => {
-    // Inform user when all assets are loaded
+    const allMenuItems = [
+      ...menuData.drinks,
+      ...menuData.starters,
+      ...menuData.mains,
+      ...menuData.desserts
+    ];
+    
+    const totalImages = allMenuItems.length;
+    let loadedImages = 0;
+    
+    // Preload function for a single image
+    const preloadImage = (src: string) => {
+      const img = new Image();
+      img.src = src;
+      
+      img.onload = () => {
+        loadedImages++;
+        if (loadedImages === totalImages) {
+          setAssetsLoaded(true);
+          toast({
+            title: "Ready to explore our menu",
+            description: "All images and assets have been loaded.",
+          });
+        }
+      };
+      
+      img.onerror = () => {
+        console.log(`Failed to load image: ${src}, using fallback`);
+        loadedImages++;
+        if (loadedImages === totalImages) {
+          setAssetsLoaded(true);
+          toast({
+            title: "Ready to explore our menu",
+            description: "Menu is ready to view.",
+          });
+        }
+      };
+    };
+    
+    // Preload all menu item images
+    allMenuItems.forEach(item => preloadImage(item.image));
+    
+    // Fallback if images take too long
     const timer = setTimeout(() => {
-      setAssetsLoaded(true);
-      toast({
-        title: "Ready to explore our menu",
-        description: "All images and assets have been loaded.",
-      });
-    }, 2000);
+      if (!assetsLoaded) {
+        setAssetsLoaded(true);
+        toast({
+          title: "Menu is ready",
+          description: "You can explore our menu now.",
+        });
+      }
+    }, 3000);
     
     return () => clearTimeout(timer);
   }, []);
 
+  // Enhanced page entrance animation classes
+  const pageEnterClasses = "animate-fade-in transition-all duration-700";
+
   return (
     <>
       <Navbar />
-      <main className="pt-24 pb-20 relative">
+      <main className={`pt-24 pb-20 relative ${pageEnterClasses}`}>
         {/* Add Adinkra background with higher opacity */}
         <AdinkraBackground 
           symbol="random" 
           density={0.4} 
-          opacity={0.08} 
+          opacity={0.15} 
           animated={true} 
         />
         
