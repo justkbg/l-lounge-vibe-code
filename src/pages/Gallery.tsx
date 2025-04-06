@@ -7,6 +7,8 @@ import { toast } from '@/components/ui/use-toast';
 import GalleryGrid, { GalleryImage } from '@/components/gallery/GalleryGrid'; 
 import ImageModal from '@/components/gallery/ImageModal';
 import FilterButtons from '@/components/gallery/FilterButtons';
+import InstagramFeed from '@/components/InstagramFeed';
+import AboutLounge from '@/components/AboutLounge';
 
 // Gallery categories
 const categories = [
@@ -183,8 +185,8 @@ const Gallery = () => {
         {/* Add Adinkra background with enhanced animation */}
         <AdinkraBackground 
           symbol="random" 
-          density={0.3} 
-          opacity={0.2} 
+          density={0.2} 
+          opacity={0.15} 
           animated={true} 
           cinematicEffect="float"
         />
@@ -208,6 +210,24 @@ const Gallery = () => {
             filter={filter} 
             onImageClick={openModal}
           />
+          
+          <div className="mt-20 mb-16 reveal-on-scroll">
+            <h2 className="section-title mb-4">About L-Lounge</h2>
+            <p className="section-subtitle mb-10">
+              A premier bar and grill in Sakumono, Ghana, offering an exceptional experience
+            </p>
+            
+            <AboutLounge />
+          </div>
+          
+          <div className="mt-20 reveal-on-scroll">
+            <h2 className="section-title mb-4">Follow Us on Instagram</h2>
+            <p className="section-subtitle mb-10">
+              Stay updated with our latest events, dishes, and moments
+            </p>
+            
+            <InstagramFeed />
+          </div>
         </div>
       </main>
       <Footer />

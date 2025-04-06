@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { GalleryImage, getFallbackImage } from './GalleryGrid';
+import { GalleryImage, getFallbackImageUrl } from './GalleryGrid';
+import AdinkraSymbol from '@/components/AdinkraSymbol';
 
 interface ImageModalProps {
   image: GalleryImage | null;
@@ -19,7 +20,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, isOpen, onClose }) => {
       <DialogContent className="max-w-4xl p-0 overflow-hidden glass-card">
         <div className="relative">
           <img 
-            src={imageError ? getFallbackImage(image.title) : image.image} 
+            src={imageError ? getFallbackImageUrl(image.title) : image.image} 
             alt={image.title} 
             className="w-full h-full object-contain"
             onError={() => setImageError(true)}
@@ -29,11 +30,9 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, isOpen, onClose }) => {
             <p className="text-white opacity-80 text-sm mt-1">Category: {image.category}</p>
           </div>
           
-          {/* Add decoration */}
-          <div className="absolute top-4 right-4 w-8 h-8 opacity-50">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-              <path fill="currentColor" className="text-primary" d="M50,10 L90,50 L50,90 L10,50 Z M50,30 L70,50 L50,70 L30,50 Z"/>
-            </svg>
+          {/* Enhanced decoration with AdinkraSymbol */}
+          <div className="absolute top-4 right-4">
+            <AdinkraSymbol symbol="random" size={24} opacity={0.7} />
           </div>
         </div>
       </DialogContent>

@@ -101,7 +101,7 @@ export const initCinematicScroll = () => {
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     
-    parallaxElements.forEach((element: Element) => {
+    parallaxElements.forEach((element) => {
       const el = element as HTMLElement;
       const speed = el.dataset.speed || '0.3';
       const direction = el.dataset.direction || 'vertical';
@@ -134,7 +134,7 @@ export const initCinematicScroll = () => {
     
     // Add subtle rotation to adinkra symbols based on scroll
     const adinkraElements = document.querySelectorAll('.adinkra-symbol');
-    adinkraElements.forEach((element: Element) => {
+    adinkraElements.forEach((element) => {
       const el = element as HTMLElement;
       const rotation = scrollY * 0.02;
       el.style.transform = `rotate(${rotation}deg)`;

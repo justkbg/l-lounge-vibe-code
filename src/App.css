@@ -14,9 +14,9 @@ body::before {
   width: 100vw;
   height: 100vh;
   background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cpath fill="%23FFD700" d="M50,10 L90,50 L50,90 L10,50 Z M50,30 L70,50 L50,70 L30,50 Z"%3E%3C/path%3E%3C/svg%3E');
-  background-size: 60px; /* Smaller symbols */
+  background-size: 40px; /* Smaller symbols */
   background-repeat: repeat;
-  opacity: 0.08; /* Subtle opacity */
+  opacity: 0.06; /* More subtle opacity */
   z-index: -1;
   pointer-events: none;
   transform-origin: center;
@@ -26,13 +26,13 @@ body::before {
 /* Add responsive behavior to Adinkra symbols */
 @media (max-width: 768px) {
   :root {
-    --adinkra-scale: 40px; /* Even smaller on mobile */
-    --adinkra-opacity: 0.08;
+    --adinkra-scale: 30px; /* Even smaller on mobile */
+    --adinkra-opacity: 0.06;
   }
   
   body::before {
-    opacity: 0.06;
-    background-size: 40px;
+    opacity: 0.05;
+    background-size: 30px;
   }
 }
 
@@ -139,10 +139,10 @@ main, section {
 /* Cursor trail effect */
 .cursor-trail {
   position: fixed;
-  width: 10px;
-  height: 10px;
+  width: 8px; /* Smaller cursor trail */
+  height: 8px;
   border-radius: 50%;
-  background: rgba(255, 215, 0, 0.5);
+  background: rgba(255, 215, 0, 0.4); /* Slightly more subtle */
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: screen;
@@ -157,7 +157,7 @@ main, section {
 
 /* Improve adinkra symbols visibility */
 .adinkra-symbol {
-  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.2)); /* Reduced glow */
   will-change: transform;
   transition: transform 0.5s ease-out;
 }

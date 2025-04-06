@@ -25,6 +25,12 @@ export const fallbackImages = [
   "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1740&auto=format&fit=crop"
 ];
 
+// Utility function to get a fallback image
+export const getFallbackImageUrl = (identifier: string = '') => {
+  const index = identifier.length % fallbackImages.length;
+  return fallbackImages[index];
+};
+
 const GalleryGrid: React.FC<GalleryGridProps> = ({ images, filter, onImageClick }) => {
   const filteredImages = filter === "all" 
     ? images 

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { GalleryImage, getFallbackImage } from './GalleryGrid';
+import { GalleryImage, getFallbackImageUrl } from './GalleryGrid';
 
 interface GalleryItemProps {
   image: GalleryImage;
@@ -19,7 +19,7 @@ const GalleryItem: React.FC<GalleryItemProps> = ({ image, index, onClick }) => {
     >
       <div className="relative h-full perspective-1000">
         <img 
-          src={itemImageError ? getFallbackImage(image.title) : image.image} 
+          src={itemImageError ? getFallbackImageUrl(image.title) : image.image} 
           alt={image.title} 
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           onError={() => setItemImageError(true)}
