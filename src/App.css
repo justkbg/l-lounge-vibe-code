@@ -14,9 +14,9 @@ body::before {
   width: 100vw;
   height: 100vh;
   background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cpath fill="%23FFD700" d="M50,10 L90,50 L50,90 L10,50 Z M50,30 L70,50 L50,70 L30,50 Z"%3E%3C/path%3E%3C/svg%3E');
-  background-size: 80px; /* Smaller symbols */
+  background-size: 60px; /* Smaller symbols */
   background-repeat: repeat;
-  opacity: 0.12; /* Subtle opacity */
+  opacity: 0.08; /* Subtle opacity */
   z-index: -1;
   pointer-events: none;
   transform-origin: center;
@@ -26,24 +26,24 @@ body::before {
 /* Add responsive behavior to Adinkra symbols */
 @media (max-width: 768px) {
   :root {
-    --adinkra-scale: 60px; /* Even smaller on mobile */
-    --adinkra-opacity: 0.12;
+    --adinkra-scale: 40px; /* Even smaller on mobile */
+    --adinkra-opacity: 0.08;
   }
   
   body::before {
-    opacity: 0.08;
-    background-size: 60px;
+    opacity: 0.06;
+    background-size: 40px;
   }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   body::before {
-    opacity: 0.15;
+    opacity: 0.12;
   }
   
   :root {
-    --adinkra-opacity: 0.25;
+    --adinkra-opacity: 0.18;
   }
 }
 
@@ -101,4 +101,63 @@ main, section {
 /* Smooth motion for all animations */
 * {
   transition-timing-function: var(--scroll-ease, cubic-bezier(0.23, 1, 0.32, 1));
+}
+
+/* Enhanced cinematic scroll reveal effects */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--scroll-ease), transform 0.8s var(--scroll-ease);
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.from-bottom {
+  transform: translateY(50px);
+}
+
+.from-left {
+  transform: translateX(-50px);
+}
+
+.from-right {
+  transform: translateX(50px);
+}
+
+.staggered-fade {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.staggered-fade.animate {
+  opacity: 1;
+}
+
+/* Cursor trail effect */
+.cursor-trail {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.5);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: screen;
+  transition: opacity 0.3s ease;
+}
+
+/* Parallax effect improvements */
+[data-parallax] {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* Improve adinkra symbols visibility */
+.adinkra-symbol {
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+  will-change: transform;
+  transition: transform 0.5s ease-out;
 }

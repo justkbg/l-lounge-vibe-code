@@ -163,12 +163,13 @@ export const initCinematicScroll = () => {
     // Track mouse movement
     document.addEventListener('mousemove', (e) => {
       // Update cursor glows
-      document.querySelectorAll('.cursor-glow').forEach(el => {
-        const rect = el.getBoundingClientRect();
+      document.querySelectorAll('.cursor-glow').forEach((el) => {
+        const element = el as HTMLElement;
+        const rect = element.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
-        el.style.setProperty('--x', `${x}%`);
-        el.style.setProperty('--y', `${y}%`);
+        element.style.setProperty('--x', `${x}%`);
+        element.style.setProperty('--y', `${y}%`);
       });
       
       // Update the position of all trail elements with delay

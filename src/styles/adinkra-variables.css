@@ -1,10 +1,10 @@
 
 :root {
   /* Adinkra symbol configuration - smaller and more visible */
-  --adinkra-opacity: 0.18;  /* Reduced for better subtlety */
-  --adinkra-scale: 80px;   /* Smaller symbols for better distribution */
+  --adinkra-opacity: 0.12;  /* Reduced for better subtlety */
+  --adinkra-scale: 60px;   /* Smaller symbols for better distribution */
   --adinkra-rotation: 0deg;
-  --adinkra-spacing: 120px; /* Reduced spacing for more symbols */
+  --adinkra-spacing: 80px; /* Reduced spacing for more symbols */
   
   /* L-Lounge color palette */
   --midnight-black: #0B0B0F;
@@ -37,14 +37,14 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   :root {
-    --adinkra-opacity: 0.22; /* Slightly increased for dark mode */
+    --adinkra-opacity: 0.15; /* Slightly increased for dark mode */
   }
 }
 
 /* Add these animation keyframes for symbols */
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(5deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
 }
 
 @keyframes spin {
@@ -82,6 +82,7 @@ html {
 .parallax-container {
   position: relative;
   overflow: hidden;
+  perspective: var(--perspective-strength);
 }
 
 /* Page transition animations */
@@ -108,4 +109,42 @@ html {
 
 .cinematic-reveal.visible {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Subtle gold shimmer effect */
+.gold-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.gold-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 215, 0, 0) 0%,
+    rgba(255, 215, 0, 0.3) 50%,
+    rgba(255, 215, 0, 0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: goldShimmer 4s infinite;
+}
+
+@keyframes goldShimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* Add immersive vertical reveal animation */
+.vertical-reveal {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.2s var(--scroll-ease);
+}
+
+.vertical-reveal.visible {
+  clip-path: inset(0 0 0 0);
 }

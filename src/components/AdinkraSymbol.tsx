@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { adinkraSymbols } from '@/assets/cultural-textures/adinkra-symbols';
 
 interface AdinkraSymbolProps {
@@ -9,27 +9,34 @@ interface AdinkraSymbolProps {
   className?: string;
   style?: React.CSSProperties;
   animate?: boolean | 'spin' | 'pulse' | 'float';
+  opacity?: number;
+  withShadow?: boolean;
 }
 
 const AdinkraSymbol: React.FC<AdinkraSymbolProps> = ({
   symbol = 'nyameNti',
-  size = 40,
+  size = 30, // Made default size smaller
   color = 'currentColor',
   className = '',
   style = {},
-  animate = false
+  animate = false,
+  opacity = 0.8, // Default opacity a bit higher for better visibility
+  withShadow = true
 }) => {
+  const [currentSymbol, setCurrentSymbol] = useState<keyof typeof adinkraSymbols>('nyameNti');
+  
   // Handle random symbol selection
-  const getSymbolKey = (): keyof typeof adinkraSymbols => {
+  useEffect(() => {
     if (symbol === 'random') {
       const symbolKeys = Object.keys(adinkraSymbols) as Array<keyof typeof adinkraSymbols>;
-      return symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
+      const randomKey = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
+      setCurrentSymbol(randomKey);
+    } else {
+      setCurrentSymbol(symbol as keyof typeof adinkraSymbols);
     }
-    return symbol;
-  };
-
-  const symbolKey = getSymbolKey();
-  const symbolSvg = adinkraSymbols[symbolKey];
+  }, [symbol]);
+  
+  const symbolSvg = adinkraSymbols[currentSymbol];
   
   // Determine animation class
   let animationClass = '';
@@ -39,14 +46,20 @@ const AdinkraSymbol: React.FC<AdinkraSymbolProps> = ({
     else if (animate === 'float') animationClass = 'animate-float';
     else animationClass = 'animate-float'; // Default animation
   }
+  
+  const shadowStyle = withShadow 
+    ? { filter: `drop-shadow(0 0 2px rgba(255, 215, 0, ${opacity * 0.8}))` } 
+    : {};
 
   return (
     <div 
-      className={`inline-flex ${animationClass} ${className}`}
+      className={`inline-flex adinkra-symbol ${animationClass} ${className}`}
       style={{ 
         width: size, 
         height: size, 
         color: color,
+        opacity: opacity,
+        ...shadowStyle,
         ...style
       }}
       dangerouslySetInnerHTML={{ __html: symbolSvg }}
