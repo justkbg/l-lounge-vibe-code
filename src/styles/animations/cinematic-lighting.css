@@ -1,0 +1,181 @@
+
+/* Cinematic lighting effects and gradients */
+
+/* Dramatic spotlight effect for cards and images */
+.spotlight-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%), 
+    rgba(255, 255, 255, 0.12) 0%, 
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-effect:hover::before {
+  opacity: 1;
+}
+
+/* Dynamic image lighting */
+.dynamic-lighting {
+  position: relative;
+}
+
+.dynamic-lighting::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 25%, 
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.dynamic-lighting:hover::after {
+  opacity: 1;
+  transform: translateX(100%);
+}
+
+/* Golden rim light effect */
+.rim-light {
+  position: relative;
+  overflow: hidden;
+}
+
+.rim-light::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  right: -10%;
+  bottom: -10%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 60%,
+    rgba(255, 215, 0, 0.1) 80%,
+    rgba(255, 215, 0, 0.2) 100%
+  );
+  opacity: 0;
+  mix-blend-mode: overlay;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rim-light:hover::after {
+  opacity: 1;
+}
+
+/* Volumetric light beam */
+.volumetric-light {
+  position: relative;
+  overflow: hidden;
+}
+
+.volumetric-light::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 80%
+  );
+  transform: rotate(45deg);
+  transition: transform 1s ease, opacity 1s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.volumetric-light:hover::before {
+  opacity: 1;
+  transform: rotate(45deg) translate(-30%, -30%);
+}
+
+/* Lens flare effect */
+.lens-flare {
+  position: relative;
+  overflow: hidden;
+}
+
+.lens-flare::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 20%,
+    rgba(255, 255, 255, 0.03) 21%,
+    transparent 26%,
+    rgba(255, 215, 0, 0.05) 27%,
+    transparent 30%,
+    rgba(255, 215, 0, 0.05) 31%,
+    transparent 34%,
+    rgba(255, 255, 255, 0.07) 36%,
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.lens-flare:hover::after {
+  opacity: 0.8;
+}
+
+/* Cinematic vignette */
+.cinematic-vignette {
+  position: relative;
+}
+
+.cinematic-vignette::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+  opacity: 0.4;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.cinematic-vignette:hover::after {
+  opacity: 0.6;
+}
