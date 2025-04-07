@@ -1,3 +1,4 @@
+
 export const initCinematicScroll = () => {
   const scrollContainer = document.querySelector(".scroll-container");
   const parallaxSections = document.querySelectorAll(".parallax-section");
@@ -12,9 +13,11 @@ export const initCinematicScroll = () => {
   // Function to handle parallax effect
   const handleParallax = () => {
     parallaxSections.forEach((section) => {
-      const depth = parseFloat(section.dataset.depth || "0.2");
+      // Type assertion to access dataset property
+      const htmlSection = section as HTMLElement;
+      const depth = parseFloat(htmlSection.dataset.depth || "0.2");
       const translateY = window.scrollY * depth;
-      (section as HTMLElement).style.transform = `translateY(${translateY}px)`;
+      htmlSection.style.transform = `translateY(${translateY}px)`;
     });
   };
 
