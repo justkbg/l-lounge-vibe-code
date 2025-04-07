@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { adinkraSymbols } from '@/assets/cultural-textures/adinkra-symbols';
 import { useFallbackImage } from '@/hooks/useFallbackImage';
-import AdinkraSymbol from './AdinkraSymbol';
+import BentoCardImage from './bento/BentoCardImage';
+import BentoCardContent from './bento/BentoCardContent';
 
 interface BentoCardProps {
   title: string;
@@ -130,111 +131,6 @@ const BentoCard = ({
         symbolSvg={symbolSvg}
       />
     </Link>
-  );
-};
-
-// Extracted image component
-interface BentoCardImageProps {
-  imageUrl: string;
-  title: string;
-  isHovered: boolean;
-  isLoaded: boolean;
-  symbolSvg: string;
-}
-
-const BentoCardImage: React.FC<BentoCardImageProps> = ({ 
-  imageUrl, 
-  title, 
-  isHovered, 
-  isLoaded,
-  symbolSvg
-}) => {
-  return (
-    <div className="absolute inset-0 rounded-2xl overflow-hidden cinematic-vignette">
-      <img 
-        src={imageUrl} 
-        alt={title} 
-        className={cn(
-          "w-full h-full object-cover transition-transform duration-500",
-          isHovered ? "scale-110" : "scale-100",
-          isLoaded ? "opacity-100" : "opacity-0",
-          "lens-flare volumetric-light dynamic-lighting"
-        )}
-        loading="lazy"
-        style={{ transition: 'transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease' }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-      
-      {/* Cinematic lighting overlay */}
-      <div 
-        className={cn(
-          "absolute inset-0 transition-opacity duration-500",
-          isHovered ? "opacity-70" : "opacity-0"
-        )}
-        style={{
-          background: "radial-gradient(circle at center, rgba(255,215,0,0.15) 0%, transparent 70%)",
-          mixBlendMode: "overlay"
-        }}
-      ></div>
-      
-      {/* Adinkra Symbol Overlay */}
-      <div 
-        className="absolute inset-0" 
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(symbolSvg)}")`,
-          backgroundSize: '80px',
-          backgroundRepeat: 'repeat',
-          transform: isHovered ? 'rotate(5deg) scale(1.1)' : 'rotate(0deg) scale(1)',
-          transition: 'transform 0.5s ease',
-          mixBlendMode: 'overlay',
-          opacity: 0.15
-        }}
-      ></div>
-    </div>
-  );
-};
-
-// Extracted content component
-interface BentoCardContentProps {
-  title: string;
-  description: string;
-  isHovered: boolean;
-  symbolSvg: string;
-}
-
-const BentoCardContent: React.FC<BentoCardContentProps> = ({ 
-  title, 
-  description, 
-  isHovered,
-  symbolSvg
-}) => {
-  return (
-    <div className="relative z-10 h-full flex flex-col justify-end p-6">
-      <h3 className="text-xl md:text-2xl font-playfair font-bold text-primary kente-border gold-shimmer">{title}</h3>
-      <p className="text-sm md:text-base text-white mb-4 max-w-xs">{description}</p>
-      <span className="text-primary text-sm font-medium inline-flex items-center gap-1 transition-transform group-hover:translate-x-2 neo-glow py-1 px-2 rounded">
-        Explore more
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M5 12h14"></path>
-          <path d="m12 5 7 7-7 7"></path>
-        </svg>
-      </span>
-      
-      {/* Animated elements on hover */}
-      {isHovered && (
-        <>
-          <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-r from-[#FF3D00] to-[#FBC02D] opacity-70 animate-pulse lens-flare"></div>
-          <div 
-            className="absolute bottom-4 left-4 w-8 h-8 opacity-80 filter drop-shadow-lg"
-            dangerouslySetInnerHTML={{ __html: symbolSvg }}
-            style={{ 
-              animation: 'spin 4s linear infinite, pulse-glow 2s ease-in-out infinite',
-              color: '#FFD700'
-            }}
-          />
-        </>
-      )}
-    </div>
   );
 };
 

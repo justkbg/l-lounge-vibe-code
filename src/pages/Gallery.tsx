@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,6 +8,9 @@ import ImageModal from '@/components/gallery/ImageModal';
 import FilterButtons from '@/components/gallery/FilterButtons';
 import InstagramFeed from '@/components/InstagramFeed';
 import AboutLounge from '@/components/AboutLounge';
+import GalleryPageHeader from '@/components/gallery/GalleryPageHeader';
+import GalleryAboutSection from '@/components/gallery/GalleryAboutSection';
+import GallerySocialSection from '@/components/gallery/GallerySocialSection';
 
 // Gallery categories
 const categories = [
@@ -126,6 +128,7 @@ const Gallery = () => {
     };
   }, [filter]); // Re-run when filter changes
 
+  // Modal handlers
   const openModal = (image: GalleryImage) => {
     setSelectedImage(image);
     setIsModalOpen(true);
@@ -135,6 +138,7 @@ const Gallery = () => {
     setIsModalOpen(false);
   };
 
+  // Preload images
   useEffect(() => {
     // Preload all images with improved error handling
     let loadedCount = 0;
@@ -192,12 +196,7 @@ const Gallery = () => {
         />
         
         <div className="container-custom">
-          <div className="text-center mb-16 reveal-on-scroll">
-            <h1 className="section-title animate-fade-in">Our Gallery</h1>
-            <p className="section-subtitle animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Explore the ambiance, culinary delights, and memorable moments at L-Lounge
-            </p>
-          </div>
+          <GalleryPageHeader />
 
           <FilterButtons 
             categories={categories} 
@@ -211,23 +210,9 @@ const Gallery = () => {
             onImageClick={openModal}
           />
           
-          <div className="mt-20 mb-16 reveal-on-scroll">
-            <h2 className="section-title mb-4">About L-Lounge</h2>
-            <p className="section-subtitle mb-10">
-              A premier bar and grill in Sakumono, Ghana, offering an exceptional experience
-            </p>
-            
-            <AboutLounge />
-          </div>
+          <GalleryAboutSection />
           
-          <div className="mt-20 reveal-on-scroll">
-            <h2 className="section-title mb-4">Follow Us on Instagram</h2>
-            <p className="section-subtitle mb-10">
-              Stay updated with our latest events, dishes, and moments
-            </p>
-            
-            <InstagramFeed />
-          </div>
+          <GallerySocialSection />
         </div>
       </main>
       <Footer />
