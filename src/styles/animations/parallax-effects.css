@@ -1,0 +1,45 @@
+
+/* Enhanced parallax effects */
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: background-position 0.1s linear;
+}
+
+.parallax-element {
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+.parallax-container {
+  overflow: hidden;
+  position: relative;
+  perspective: 1000px;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  will-change: transform;
+}
+
+.parallax-deep {
+  transform: translateZ(-100px) scale(1.5);
+}
+
+.parallax-medium {
+  transform: translateZ(-50px) scale(1.25);
+}
+
+.parallax-shallow {
+  transform: translateZ(-25px) scale(1.125);
+}
+
+.perspective-section {
+  perspective: 1000px;
+}

@@ -1,0 +1,49 @@
+
+/* Cinematic scroll reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-on-scroll.from-bottom {
+  transform: translateY(50px);
+}
+
+.reveal-on-scroll.from-left {
+  transform: translateX(-50px);
+}
+
+.reveal-on-scroll.from-right {
+  transform: translateX(50px);
+}
+
+.reveal-on-scroll.visible.from-bottom,
+.reveal-on-scroll.visible.from-left,
+.reveal-on-scroll.visible.from-right {
+  transform: translate(0, 0);
+}
+
+/* Horizontal reveal classes */
+.horizontal-reveal {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1), transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.horizontal-reveal.from-left {
+  transform: translateX(-60px);
+}
+
+.horizontal-reveal.from-right {
+  transform: translateX(60px);
+}
+
+.horizontal-reveal.visible {
+  opacity: 1;
+  transform: translateX(0);
+}

@@ -1,0 +1,42 @@
+
+/* Zoom reveal classes */
+.zoom-reveal {
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.zoom-reveal.zoom-in {
+  transform: scale(0.85);
+}
+
+.zoom-reveal.zoom-out {
+  transform: scale(1.15);
+}
+
+.zoom-reveal.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Rotate reveal classes */
+.rotate-reveal {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1), transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: center;
+}
+
+.rotate-reveal.visible {
+  opacity: 1;
+}
+
+/* Blur reveal classes */
+.blur-reveal {
+  opacity: 0.8;
+  transition: opacity 1.5s cubic-bezier(0.23, 1, 0.32, 1), filter 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+  filter: blur(5px);
+}
+
+.blur-reveal.visible {
+  opacity: 1;
+  filter: blur(0);
+}

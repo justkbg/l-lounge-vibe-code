@@ -1,0 +1,48 @@
+
+/* Basic animation classes */
+.fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Cinematic animation classes */
+.fade-from-left {
+  animation: fadeFromLeft 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.fade-from-right {
+  animation: fadeFromRight 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.zoom-in {
+  animation: zoomIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.zoom-out {
+  animation: zoomOut 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.rotate-in {
+  animation: rotateIn 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.blur-in {
+  animation: blurIn 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.slide-up-cinematic {
+  animation: slideUpCinematic 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.dramatic-reveal {
+  animation: dramaticReveal 1.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.text-reveal {
+  animation: textReveal 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
