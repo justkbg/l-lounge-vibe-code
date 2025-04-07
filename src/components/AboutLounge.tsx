@@ -28,7 +28,7 @@ const AboutLounge: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
               <div className="mt-1">
-                <AdinkraSymbol symbol="osramNe Nsoroma" size={24} color="#FFD700" />
+                <AdinkraSymbol symbol="adinkrahene" size={24} color="#FFD700" />
               </div>
               <div>
                 <h3 className="text-xl font-playfair font-bold text-primary mb-2">Our Ambiance</h3>
@@ -45,7 +45,7 @@ const AboutLounge: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
               <div className="mt-1">
-                <AdinkraSymbol symbol="sesa Wo Suban" size={24} color="#FFD700" />
+                <AdinkraSymbol symbol="dwennimmen" size={24} color="#FFD700" />
               </div>
               <div>
                 <h3 className="text-xl font-playfair font-bold text-primary mb-2">Customer Feedback</h3>

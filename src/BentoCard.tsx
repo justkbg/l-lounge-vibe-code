@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { adinkraSymbols } from '@/assets/cultural-textures/adinkra-symbols';
 import { useFallbackImage } from '@/hooks/useFallbackImage';
-import AdinkraSymbol from './AdinkraSymbol';
+import AdinkraSymbol from '@/components/AdinkraSymbol';
 
 interface BentoCardProps {
   title: string;
@@ -31,7 +30,6 @@ const BentoCard = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const { imageUrl, imageError } = useFallbackImage(image, title);
   
-  // Get a random symbol key if set to 'random'
   const getSymbolKey = (): keyof typeof adinkraSymbols => {
     if (adinkraSymbol === 'random') {
       const symbolKeys = Object.keys(adinkraSymbols) as Array<keyof typeof adinkraSymbols>;
@@ -43,7 +41,6 @@ const BentoCard = ({
   const symbolKey = getSymbolKey();
   const symbolSvg = adinkraSymbols[symbolKey];
 
-  // Preload the image for better user experience
   useEffect(() => {
     const img = new Image();
     img.src = image;
@@ -55,7 +52,6 @@ const BentoCard = ({
     img.onerror = () => {
       console.log(`Failed to load image: ${image}, using fallback`);
       
-      // Fallback is handled by the useFallbackImage hook
       setIsLoaded(true);
     };
     
@@ -86,12 +82,10 @@ const BentoCard = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Loading skeleton while image loads */}
       {!isLoaded && (
         <div className="absolute inset-0 bg-card animate-pulse rounded-2xl overflow-hidden" />
       )}
 
-      {/* Card Image */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
         <img 
           src={imageUrl} 
@@ -106,7 +100,6 @@ const BentoCard = ({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
         
-        {/* Adinkra Symbol Pattern Overlay */}
         <div 
           className="absolute inset-0" 
           style={{ 
@@ -121,7 +114,6 @@ const BentoCard = ({
         ></div>
       </div>
 
-      {/* Card Content */}
       <div className="relative z-10 h-full flex flex-col justify-end p-6">
         <h3 className="text-xl md:text-2xl font-playfair font-bold text-primary mb-2">{title}</h3>
         <p className="text-sm md:text-base text-white mb-4 max-w-xs">{description}</p>
@@ -133,7 +125,6 @@ const BentoCard = ({
           </svg>
         </span>
         
-        {/* Animated elements that appear on hover */}
         {isHovered && (
           <>
             <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-r from-[#FF3D00] to-[#FBC02D] opacity-60 animate-pulse" />
