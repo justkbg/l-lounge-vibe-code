@@ -1,0 +1,88 @@
+
+/* Marcello Design Core Elements */
+
+:root {
+  --royal-gold: #FFD700;
+  --royal-gold-light: rgba(255, 215, 0, 0.2);
+  --royal-gold-dark: #D4AF37;
+}
+
+/* Core Elements */
+.marcello-x {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.marcello-x::before, 
+.marcello-x::after {
+  content: '';
+  position: absolute;
+  background-color: var(--royal-gold, #FFD700);
+  transform-origin: center;
+}
+
+.marcello-x::before {
+  width: 100%;
+  height: 3px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.marcello-x::after {
+  width: 3px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* Layout Components */
+.marcello-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.marcello-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 0 auto;
+}
+
+/* Responsive Container */
+.marcello-container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+/* Page Section */
+.marcello-section {
+  position: relative;
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+/* Contact Info */
+.marcello-contact-info {
+  font-family: var(--font-playfair);
+  color: var(--royal-gold);
+  letter-spacing: 0.02em;
+}
+
+.marcello-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.marcello-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

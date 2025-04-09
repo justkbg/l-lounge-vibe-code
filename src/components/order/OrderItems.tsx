@@ -36,7 +36,7 @@ const OrderItems: React.FC<OrderItemsProps> = ({ addToCart }) => {
           
           <CardFooter className="flex justify-between">
             <Button 
-              onClick={() => addToCart(item)} 
+              onClick={() => addToCart({...item, quantity: 1})} 
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               Add to Order

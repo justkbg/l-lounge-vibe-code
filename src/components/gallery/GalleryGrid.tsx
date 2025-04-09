@@ -3,6 +3,7 @@ import React from 'react';
 import { toast } from '@/components/ui/use-toast';
 import GalleryItem from './GalleryItem';
 import { useFallbackImage } from '@/hooks/useFallbackImage';
+import { galleryImages } from '@/data/galleryData';
 
 export interface GalleryImage {
   id: number;
@@ -12,7 +13,6 @@ export interface GalleryImage {
 }
 
 interface GalleryGridProps {
-  images: GalleryImage[];
   filter: string;
   onImageClick: (image: GalleryImage) => void;
 }
@@ -31,10 +31,10 @@ export const getFallbackImageUrl = (identifier: string = '') => {
   return fallbackImages[index];
 };
 
-const GalleryGrid: React.FC<GalleryGridProps> = ({ images, filter, onImageClick }) => {
+const GalleryGrid: React.FC<GalleryGridProps> = ({ filter, onImageClick }) => {
   const filteredImages = filter === "all" 
-    ? images 
-    : images.filter(img => img.category === filter);
+    ? galleryImages 
+    : galleryImages.filter(img => img.category === filter);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

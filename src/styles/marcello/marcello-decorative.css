@@ -1,0 +1,111 @@
+
+/* Marcello Design Decorative Elements */
+
+/* Decorative Elements */
+.marcello-border {
+  position: relative;
+}
+
+.marcello-border::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background-color: var(--royal-gold, #FFD700);
+}
+
+.marcello-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--royal-gold, #FFD700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Typography */
+.marcello-caption {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--royal-gold, #FFD700);
+}
+
+.marcello-bold-text {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Background Patterns */
+.marcello-x-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.marcello-x-background::before {
+  content: 'X';
+  position: absolute;
+  font-size: clamp(200px, 40vw, 400px);
+  opacity: 0.03;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 900;
+  pointer-events: none;
+}
+
+/* Decorative X Pattern */
+.marcello-x-pattern {
+  position: relative;
+}
+
+.marcello-x-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 45%, var(--royal-gold, #FFD700) 45%, var(--royal-gold, #FFD700) 55%, transparent 55%),
+    linear-gradient(135deg, transparent 45%, var(--royal-gold, #FFD700) 45%, var(--royal-gold, #FFD700) 55%, transparent 55%);
+  background-size: 30px 30px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+/* Divider Elements */
+.marcello-divider {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  max-width: 400px;
+  margin: 40px auto;
+}
+
+.marcello-divider::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 1px;
+  background-color: var(--royal-gold, #FFD700);
+}
+
+.marcello-divider::after {
+  content: 'X';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: var(--royal-gold, #FFD700);
+  background-color: var(--background, #0B0B0F);
+  padding: 0 10px;
+}

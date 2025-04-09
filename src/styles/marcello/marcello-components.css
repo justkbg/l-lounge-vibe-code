@@ -1,0 +1,81 @@
+
+/* Marcello Design Components */
+
+/* Buttons */
+.marcello-minimal-button {
+  position: relative;
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--royal-gold, #FFD700);
+  border: 1px solid var(--royal-gold, #FFD700);
+  transition: all 0.3s;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.marcello-minimal-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--royal-gold, #FFD700);
+  opacity: 0.1;
+  transition: all 0.3s;
+}
+
+.marcello-minimal-button:hover::before {
+  left: 0;
+}
+
+.marcello-minimal-button.with-x::after {
+  content: 'X';
+  margin-left: 8px;
+  font-size: 0.8em;
+}
+
+/* Frame Effects */
+.marcello-frame {
+  position: relative;
+  padding: 10px;
+  box-shadow: 
+    0 0 0 1px var(--royal-gold, #FFD700),
+    10px 10px 0 -5px var(--background, #0B0B0F),
+    10px 10px 0 -4px var(--royal-gold, #FFD700);
+}
+
+/* Dynamic Cards */
+.marcello-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.marcello-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(255, 215, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 215, 0, 0.15);
+}
+
+.marcello-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 215, 0, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.marcello-card:hover::before {
+  opacity: 1;
+}
