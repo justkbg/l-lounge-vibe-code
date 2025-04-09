@@ -12,25 +12,19 @@ import Events from "./pages/Events";
 import Contact from "./pages/Contact";
 import Reservations from "./pages/Reservations";
 import NotFound from "./pages/NotFound";
+import MarcelloUI from "./pages/MarcelloUI";
+import Order from "./pages/Order";
 import { initCinematicScroll } from "./utils/cinematicScroll";
 import "./App.css";
 import "./styles/adinkra-variables.css";
 
-// Enhanced animation on route changes
+// Enhanced animation on route changes with improved scrolling
 const ScrollToTop = () => {
   const location = useLocation();
   
   useEffect(() => {
-    // Smooth scroll to top with easing
-    const scrollToTop = () => {
-      const currentPosition = window.scrollY;
-      if (currentPosition > 0) {
-        window.requestAnimationFrame(scrollToTop);
-        window.scrollTo(0, currentPosition - currentPosition / 8);
-      }
-    };
-    
-    scrollToTop();
+    // Improved smooth scroll to top
+    window.scrollTo({ top: 0, behavior: 'instant' });
     
     // Add cinematic page transition effect
     document.body.classList.add('page-transition');
@@ -51,12 +45,6 @@ const ScrollToTop = () => {
           section.classList.add('animate-fade-in');
         });
       }
-      
-      // Add animated class to all adinkra symbols
-      document.querySelectorAll('.adinkra-symbol').forEach((symbol, index) => {
-        symbol.classList.add('animate-fade-in');
-        (symbol as HTMLElement).style.animationDelay = `${0.05 * (index % 10)}s`;
-      });
       
       // Ensure all pages have adinkra background
       document.querySelectorAll('main, section').forEach(element => {
@@ -88,6 +76,8 @@ const App = () => (
           <Route path="/events" element={<Events />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/reservations" element={<Reservations />} />
+          <Route path="/marcello-ui" element={<MarcelloUI />} />
+          <Route path="/order" element={<Order />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

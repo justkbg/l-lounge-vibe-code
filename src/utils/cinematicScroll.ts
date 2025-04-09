@@ -5,6 +5,13 @@
  */
 
 export const initCinematicScroll = () => {
+  // Add the scroll-container class to main elements if not already present
+  document.querySelectorAll('main').forEach(element => {
+    if (!element.classList.contains('scroll-container')) {
+      element.classList.add('scroll-container');
+    }
+  });
+
   const scrollContainer = document.querySelector(".scroll-container");
   const parallaxSections = document.querySelectorAll(".parallax-section");
   const cinematicReveals = document.querySelectorAll(".cinematic-reveal");
@@ -204,7 +211,7 @@ export const initCinematicScroll = () => {
     });
   };
 
-  // Smooth scroll function
+  // Modified smooth scroll function to fix glitches
   const enableSmoothScroll = () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -215,29 +222,8 @@ export const initCinematicScroll = () => {
         const targetElement = document.querySelector(targetId);
         if (!targetElement) return;
         
-        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-        const startPosition = window.scrollY;
-        const distance = targetPosition - startPosition;
-        const duration = 1000; // ms
-        let start: number | null = null;
-        
-        const animateScroll = (timestamp: number) => {
-          if (!start) start = timestamp;
-          const progress = timestamp - start;
-          const percentage = Math.min(progress / duration, 1);
-          
-          // Easing function for smoother animation
-          const easeInOutCubic = (t: number) => 
-            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-            
-          window.scrollTo(0, startPosition + distance * easeInOutCubic(percentage));
-          
-          if (progress < duration) {
-            window.requestAnimationFrame(animateScroll);
-          }
-        };
-        
-        window.requestAnimationFrame(animateScroll);
+        // Instant scroll to avoid glitches
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
   };
