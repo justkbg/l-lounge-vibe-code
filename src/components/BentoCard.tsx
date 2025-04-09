@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { adinkraSymbols } from '@/assets/cultural-textures/adinkra-symbols';
 import { useFallbackImage } from '@/hooks/useFallbackImage';
-import BentoCardImage from './bento/BentoCardImage';
-import BentoCardContent from './bento/BentoCardContent';
 
 interface BentoCardProps {
   title: string;
@@ -93,7 +91,7 @@ const BentoCard = ({
     <Link 
       to={link} 
       className={cn(
-        'bento-card group block glass-card hover-float cursor-glow relative overflow-hidden',
+        'bento-card group block glass-card marcello-card relative overflow-hidden',
         'transform-gpu transition-all duration-300',
         'animate-fade-in opacity-0 perspective-1000',
         'spotlight-effect rim-light tilt-on-hover depth-shadow parallax-card',
@@ -116,20 +114,64 @@ const BentoCard = ({
         <div className="absolute inset-0 bg-card animate-pulse rounded-2xl overflow-hidden" />
       )}
 
-      <BentoCardImage 
-        imageUrl={imageUrl} 
-        title={title} 
-        isHovered={isHovered} 
-        isLoaded={isLoaded} 
-        symbolSvg={symbolSvg} 
-      />
+      {/* Image background */}
+      <div className="absolute inset-0 rounded-2xl overflow-hidden">
+        <img 
+          src={imageUrl} 
+          alt={title} 
+          className={cn(
+            "w-full h-full object-cover transition-transform duration-500",
+            isHovered ? "scale-110" : "scale-100",
+            isLoaded ? "opacity-100" : "opacity-0"
+          )}
+          loading="lazy"
+          style={{ transition: 'transform 0.5s ease, opacity 0.5s ease' }}
+        />
+        
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+        
+        {/* Adinkra pattern overlay */}
+        <div 
+          className="absolute inset-0" 
+          style={{ 
+            backgroundImage: `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(symbolSvg)}")`,
+            backgroundSize: '60px',
+            backgroundRepeat: 'repeat',
+            transform: isHovered ? 'rotate(5deg) scale(1.1)' : 'rotate(0deg) scale(1)',
+            transition: 'transform 0.5s ease',
+            mixBlendMode: 'overlay',
+            opacity: 0.12
+          }}
+        ></div>
+        
+        {/* Marcello X corner accent */}
+        <div className="absolute top-4 right-4 w-6 h-6 marcello-x opacity-60"></div>
+      </div>
 
-      <BentoCardContent 
-        title={title} 
-        description={description} 
-        isHovered={isHovered}
-        symbolSvg={symbolSvg}
-      />
+      {/* Content */}
+      <div className="relative z-10 h-full flex flex-col justify-end p-6">
+        <h3 className="text-xl md:text-2xl font-playfair font-bold text-primary mb-2 marcello-underline inline-block">{title}</h3>
+        <p className="text-sm md:text-base text-white mb-4 max-w-xs">{description}</p>
+        <span className="text-primary text-sm font-medium inline-flex items-center gap-1 transition-transform group-hover:translate-x-2 py-1 px-2 rounded">
+          Explore more
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </span>
+      </div>
+      
+      {/* Dynamic lighting effect */}
+      {isHovered && (
+        <div 
+          className="absolute inset-0 pointer-events-none" 
+          style={{
+            background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(255,215,0,0.15) 0%, transparent 60%)`,
+            mixBlendMode: 'overlay'
+          }}
+        ></div>
+      )}
     </Link>
   );
 };

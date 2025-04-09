@@ -3,6 +3,8 @@
 
 .marcello-x {
   position: relative;
+  width: 30px;
+  height: 30px;
 }
 
 .marcello-x::before, 
@@ -31,7 +33,7 @@
 
 .marcello-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
 }
 
@@ -140,4 +142,143 @@
 
 .marcello-image-hover:hover::after {
   opacity: 1;
+}
+
+/* Marcello decorative X pattern - new */
+.marcello-x-pattern {
+  position: relative;
+}
+
+.marcello-x-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 45%, var(--royal-gold, #FFD700) 45%, var(--royal-gold, #FFD700) 55%, transparent 55%),
+    linear-gradient(135deg, transparent 45%, var(--royal-gold, #FFD700) 45%, var(--royal-gold, #FFD700) 55%, transparent 55%);
+  background-size: 30px 30px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+/* Marcello section divider */
+.marcello-divider {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  margin: 40px 0;
+}
+
+.marcello-divider::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 1px;
+  background-color: var(--royal-gold, #FFD700);
+}
+
+.marcello-divider::after {
+  content: 'X';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: var(--royal-gold, #FFD700);
+  background-color: var(--background, #0B0B0F);
+  padding: 0 10px;
+}
+
+/* Marcello image frame */
+.marcello-frame {
+  position: relative;
+  padding: 10px;
+  box-shadow: 
+    0 0 0 1px var(--royal-gold, #FFD700),
+    10px 10px 0 -5px var(--background, #0B0B0F),
+    10px 10px 0 -4px var(--royal-gold, #FFD700);
+}
+
+/* Improved Marcello gallery item */
+.marcello-gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.marcello-gallery-item::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-top: 1px solid var(--royal-gold, #FFD700);
+  border-right: 1px solid var(--royal-gold, #FFD700);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.marcello-gallery-item:hover::after {
+  opacity: 1;
+}
+
+/* Marcello dynamic card */
+.marcello-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.marcello-card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.marcello-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 215, 0, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.marcello-card:hover::before {
+  opacity: 1;
+}
+
+/* Marcello underline animation */
+.marcello-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.marcello-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--royal-gold, #FFD700);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.marcello-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }

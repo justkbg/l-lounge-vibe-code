@@ -1,6 +1,7 @@
 
 import React from 'react';
 import BentoCard from '@/components/BentoCard';
+import { motion } from 'framer-motion';
 
 const BentoGridSection: React.FC = () => {
   const offeringsData = [
@@ -35,33 +36,51 @@ const BentoGridSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-[#0B0B0F] adinkra-bg">
+    <section className="py-20 bg-[#0B0B0F] adinkra-bg marcello-x-background">
       <div className="container-custom">
         <div className="text-center mb-16">
           <div className="sankofa-symbol mb-4"></div>
-          <h2 className="section-title">Explore L-Lounge</h2>
-          <p className="section-subtitle">
+          <motion.h2 
+            className="section-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Explore L-Lounge
+          </motion.h2>
+          <motion.p 
+            className="section-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             Discover our premium offerings and experiences
-          </p>
+          </motion.p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(280px,auto)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[minmax(350px,auto)]">
           {offeringsData.map((item, index) => (
-            <BentoCard
+            <motion.div
               key={index}
-              title={item.title}
-              description={item.description}
-              image={item.image}
-              link={item.link}
-              size={item.size}
-              className="animate-fade-in"
-              style={{ animationDelay: `${0.2 * index}s` }}
-            />
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+              className={index === 0 ? "lg:col-span-2 lg:row-span-1" : ""}
+            >
+              <BentoCard
+                title={item.title}
+                description={item.description}
+                image={item.image}
+                link={item.link}
+                size={item.size}
+                className="h-full"
+              />
+            </motion.div>
           ))}
         </div>
         
         <div className="mt-16 text-center">
-          <div className="kente-divider"></div>
+          <div className="marcello-divider mx-auto"></div>
           <p className="text-muted-foreground mt-8 font-playfair italic">
             "Akwaaba" — Welcome to an authentic Ghanaian luxury experience
           </p>

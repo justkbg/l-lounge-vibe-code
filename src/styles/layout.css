@@ -24,11 +24,82 @@ body {
 .dynamic-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  grid-auto-rows: minmax(280px, auto);
+  grid-auto-rows: minmax(300px, auto);
   gap: 1.5rem;
 }
 
 .dynamic-grid.masonry {
   grid-template-rows: masonry;
   align-items: start;
+}
+
+/* Marcello-inspired layout components */
+.marcello-container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.marcello-section {
+  position: relative;
+  padding: 100px 0;
+  overflow: hidden;
+}
+
+/* Image display enhancements */
+.image-display {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.image-display:hover {
+  transform: translateY(-10px);
+}
+
+.image-display img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.image-display:hover img {
+  transform: scale(1.05);
+}
+
+/* Better responsive image containers */
+.responsive-image-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 75%; /* 4:3 aspect ratio by default */
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.responsive-image-container.square {
+  padding-bottom: 100%; /* 1:1 aspect ratio */
+}
+
+.responsive-image-container.widescreen {
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.responsive-image-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.responsive-image-container:hover img {
+  transform: scale(1.05);
 }
