@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -6,8 +7,6 @@ import { toast } from '@/components/ui/use-toast';
 import GalleryGrid, { GalleryImage } from '@/components/gallery/GalleryGrid'; 
 import ImageModal from '@/components/gallery/ImageModal';
 import FilterButtons from '@/components/gallery/FilterButtons';
-import InstagramFeed from '@/components/InstagramFeed';
-import AboutLounge from '@/components/AboutLounge';
 import GalleryPageHeader from '@/components/gallery/GalleryPageHeader';
 import GalleryAboutSection from '@/components/gallery/GalleryAboutSection';
 import GallerySocialSection from '@/components/gallery/GallerySocialSection';
@@ -128,6 +127,16 @@ const Gallery = () => {
     };
   }, [filter]); // Re-run when filter changes
 
+  // Initialize cinematic scroll effects when component mounts
+  useEffect(() => {
+    const scrollContainer = document.querySelector('.scroll-container');
+    if (!scrollContainer) {
+      // Add the scroll-container class to the main element
+      const mainElement = galleryRef.current?.parentElement;
+      if (mainElement) mainElement.classList.add('scroll-container');
+    }
+  }, []);
+
   // Modal handlers
   const openModal = (image: GalleryImage) => {
     setSelectedImage(image);
@@ -183,7 +192,7 @@ const Gallery = () => {
   const pageEnterClasses = "animate-fade-in transition-all duration-700";
 
   return (
-    <>
+    <div className="scroll-container">
       <Navbar />
       <main className={`pt-24 pb-20 relative ${pageEnterClasses}`} ref={galleryRef}>
         {/* Add Adinkra background with enhanced animation */}
@@ -221,7 +230,10 @@ const Gallery = () => {
         isOpen={isModalOpen} 
         onClose={closeModal} 
       />
-    </>
+      
+      {/* This element enables cinematic scene transitions */}
+      <div className="scene-transition"></div>
+    </div>
   );
 };
 

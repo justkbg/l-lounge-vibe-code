@@ -1,0 +1,143 @@
+
+/* Marcello Design Inspired Elements */
+
+.marcello-x {
+  position: relative;
+}
+
+.marcello-x::before, 
+.marcello-x::after {
+  content: '';
+  position: absolute;
+  background-color: var(--royal-gold, #FFD700);
+  transform-origin: center;
+}
+
+.marcello-x::before {
+  width: 100%;
+  height: 3px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.marcello-x::after {
+  width: 3px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.marcello-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.marcello-border {
+  position: relative;
+}
+
+.marcello-border::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background-color: var(--royal-gold, #FFD700);
+}
+
+.marcello-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--royal-gold, #FFD700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marcello-minimal-button {
+  position: relative;
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--royal-gold, #FFD700);
+  border: 1px solid var(--royal-gold, #FFD700);
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.marcello-minimal-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--royal-gold, #FFD700);
+  opacity: 0.1;
+  transition: all 0.3s;
+}
+
+.marcello-minimal-button:hover::before {
+  left: 0;
+}
+
+.marcello-caption {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--royal-gold, #FFD700);
+}
+
+.marcello-bold-text {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.marcello-x-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.marcello-x-background::before {
+  content: 'X';
+  position: absolute;
+  font-size: 400px;
+  opacity: 0.03;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 900;
+  pointer-events: none;
+}
+
+/* Marcello-inspired image hover effect */
+.marcello-image-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.marcello-image-hover img {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.marcello-image-hover:hover img {
+  transform: scale(1.05);
+}
+
+.marcello-image-hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.marcello-image-hover:hover::after {
+  opacity: 1;
+}
