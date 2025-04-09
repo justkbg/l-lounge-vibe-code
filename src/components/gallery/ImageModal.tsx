@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { GalleryImage, getFallbackImageUrl } from './GalleryGrid';
-import AdinkraSymbol from '@/components/AdinkraSymbol';
+import { GalleryImage } from './GalleryGrid';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface ImageModalProps {
   image: GalleryImage | null;
@@ -11,62 +11,45 @@ interface ImageModalProps {
 }
 
 const ImageModal: React.FC<ImageModalProps> = ({ image, isOpen, onClose }) => {
-  const [imageError, setImageError] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  // Add entrance animation when modal opens
+  const [loaded, setLoaded] = useState(false);
+  
   useEffect(() => {
     if (isOpen) {
-      setIsAnimating(true);
-      const timer = setTimeout(() => {
-        setIsAnimating(false);
-      }, 600);
-      
-      return () => clearTimeout(timer);
+      setLoaded(false);
     }
-  }, [isOpen]);
-
+  }, [isOpen, image]);
+  
   if (!image) return null;
-
+  
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`max-w-4xl p-0 overflow-hidden glass-card film-grain cinematic-vignette ${isAnimating ? 'scale-in-animation' : ''}`}>
-        <div className="relative perspective-1000">
-          <img 
-            src={imageError ? getFallbackImageUrl(image.title) : image.image} 
-            alt={image.title} 
-            className="w-full h-full object-contain lens-flare dynamic-lighting"
-            onError={() => setImageError(true)}
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-5xl p-0 overflow-hidden bg-black/95 border-none">
+        <div className="relative w-full h-full">
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 z-50 marcello-x w-8 h-8 bg-black/30 rounded-full p-6 flex items-center justify-center backdrop-blur-sm"
+            aria-label="Close modal"
           />
           
-          {/* Cinematic lighting overlay */}
-          <div className="absolute inset-0 pointer-events-none" style={{
-            background: 'radial-gradient(circle at center, rgba(255,215,0,0.1) 0%, transparent 70%)',
-            mixBlendMode: 'overlay'
-          }}></div>
-          
-          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
-            <h3 className="text-xl font-playfair font-bold text-primary gold-shimmer">{image.title}</h3>
-            <p className="text-white opacity-80 text-sm mt-1">Category: {image.category}</p>
+          <div className="relative overflow-hidden max-h-[80vh]">
+            <div className={`transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+              <OptimizedImage
+                src={image.image}
+                alt={image.title}
+                className="w-full max-h-[80vh] object-contain"
+                fallbackIdentifier={image.title}
+              />
+            </div>
+            
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+              <h2 className="text-2xl font-playfair text-white gold-shimmer">{image.title}</h2>
+              <div className="flex items-center mt-2">
+                <span className="bg-primary/20 text-primary text-xs px-2 py-1 rounded-full">
+                  {image.category}
+                </span>
+              </div>
+            </div>
           </div>
-          
-          {/* Enhanced decoration with AdinkraSymbol */}
-          <div className="absolute top-4 right-4 animate-float">
-            <AdinkraSymbol symbol="random" size={32} opacity={0.8} />
-          </div>
-          
-          {/* Dramatic side light */}
-          <div className="absolute -right-20 top-1/2 transform -translate-y-1/2 w-40 h-[300%] rotate-12 pointer-events-none" style={{
-            background: 'linear-gradient(90deg, transparent, rgba(255,215,0,0.1) 50%, rgba(255,215,0,0.2))',
-            filter: 'blur(20px)',
-            mixBlendMode: 'overlay'
-          }}></div>
-          
-          {/* Bottom light reflection */}
-          <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none" style={{
-            background: 'linear-gradient(to top, rgba(255,215,0,0.1), transparent)',
-            mixBlendMode: 'overlay'
-          }}></div>
         </div>
       </DialogContent>
     </Dialog>

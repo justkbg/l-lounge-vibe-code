@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { GalleryImage, getFallbackImageUrl } from './GalleryGrid';
+import { GalleryImage } from './GalleryGrid';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface GalleryItemProps {
   image: GalleryImage;
@@ -9,7 +10,6 @@ interface GalleryItemProps {
 }
 
 const GalleryItem: React.FC<GalleryItemProps> = ({ image, index, onClick }) => {
-  const [itemImageError, setItemImageError] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   
   // Handle mouse movement for spotlight effect
@@ -41,12 +41,11 @@ const GalleryItem: React.FC<GalleryItemProps> = ({ image, index, onClick }) => {
       onMouseMove={handleMouseMove}
     >
       <div className="relative h-full perspective-1000 tilt-on-hover">
-        <img 
-          src={itemImageError ? getFallbackImageUrl(image.title) : image.image} 
-          alt={image.title} 
+        <OptimizedImage 
+          src={image.image}
+          alt={image.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 dynamic-lighting"
-          onError={() => setItemImageError(true)}
-          loading="lazy"
+          fallbackIdentifier={image.title}
         />
         
         {/* Dramatic lighting overlay */}

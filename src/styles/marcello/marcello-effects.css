@@ -111,3 +111,78 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Image loading optimizations */
+.progressive-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.progressive-image-placeholder {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0,0,0,0.1);
+  filter: blur(10px);
+  transition: opacity 0.3s ease;
+}
+
+.progressive-image-loaded .progressive-image-placeholder {
+  opacity: 0;
+}
+
+/* Lazy-loaded image animation */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
+}
+
+/* Page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Smooth scrolling enhancements */
+html.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Loading effects */
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0.05) 0%,
+    rgba(255, 215, 0, 0.1) 50%,
+    rgba(255, 215, 0, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
