@@ -16,6 +16,7 @@ import MarcelloUI from "./pages/MarcelloUI";
 import Order from "./pages/Order";
 import LoadingScreen from "./components/LoadingScreen";
 import { initCinematicScroll } from "./utils/cinematicScroll";
+import { preloadCriticalImages } from "./utils/imageLoader";
 import "./App.css";
 import "./styles/adinkra-variables.css";
 
@@ -30,9 +31,11 @@ const ScrollToTop = () => {
     // Reset any ongoing animations
     const animatingElements = document.querySelectorAll('.animate-fade-in, .animate-scale-in');
     animatingElements.forEach(el => {
-      // Force reflow with a safer approach that checks element type
+      // Force reflow with a safer approach that checks element type - fixed TypeScript error
       if (el instanceof HTMLElement) {
-        void el.offsetWidth;
+        el.classList.remove('animate-fade-in', 'animate-scale-in');
+        void el.offsetHeight; // Trigger reflow
+        el.classList.add('animate-fade-in'); 
       }
     });
     
@@ -53,7 +56,9 @@ const ScrollToTop = () => {
         sections.forEach((section, index) => {
           // Stagger the animations with a small delay between each
           setTimeout(() => {
-            section.classList.add('animate-fade-in');
+            if (section instanceof HTMLElement) {
+              section.classList.add('animate-fade-in');
+            }
           }, 100 * (index + 1));
         });
       }
@@ -66,6 +71,14 @@ const ScrollToTop = () => {
   
   return null;
 };
+
+// List of critical images to preload for better performance
+const criticalImages = [
+  "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1932&q=80",
+  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80",
+  "https://images.unsplash.com/photo-1544637378-a0ddf15e73c0?q=80&w=1740&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1740&auto=format&fit=crop"
+];
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,15 +102,9 @@ const App = () => {
       // First time visitor - show loading screen
       localStorage.setItem('hasVisitedBefore', 'true');
       
-      // Preload critical images
-      const imagesToPreload = [
-        // Add URLs of critical images here
-      ];
-      
-      // Preload images in background
-      imagesToPreload.forEach(src => {
-        const img = new Image();
-        img.src = src;
+      // Preload critical images in background
+      preloadCriticalImages(criticalImages).then(() => {
+        console.log('Critical images preloaded successfully');
       });
       
       // Set timeout to hide loading screen after a reasonable time
@@ -118,6 +125,11 @@ const App = () => {
     
     // Reset scroll position
     window.scrollTo(0, 0);
+    
+    // Add GPU acceleration for smoother animations
+    document.body.style.transform = 'translateZ(0)';
+    document.body.style.backfaceVisibility = 'hidden';
+    document.body.style.perspective = '1000px';
   }, []);
   
   const handleLoadComplete = () => {
@@ -149,7 +161,6 @@ const App = () => {
               <Route path="/reservations" element={<Reservations />} />
               <Route path="/marcello-ui" element={<MarcelloUI />} />
               <Route path="/order" element={<Order />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           )}

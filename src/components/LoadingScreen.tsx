@@ -1,77 +1,155 @@
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { adinkraSymbols } from '@/assets/cultural-textures/adinkra-symbols';
+import AdinkraSymbol from './AdinkraSymbol';
 
 interface LoadingScreenProps {
   onLoadComplete?: () => void;
+  minDisplayTime?: number;
 }
 
-const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
-  const [progress, setProgress] = useState(0);
-  const [showLoader, setShowLoader] = useState(true);
+const LoadingScreen: React.FC<LoadingScreenProps> = ({
+  onLoadComplete,
+  minDisplayTime = 2500
+}) => {
+  const [progress, setProgress] = useState<number>(0);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [mainLoaded, setMainLoaded] = useState<boolean>(false);
+  
+  const symbolKeys = Object.keys(adinkraSymbols);
+  
+  const getRandomSymbol = () => {
+    return symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
+  };
   
   useEffect(() => {
-    // Simulate loading progress
-    const timer = setInterval(() => {
+    let interval: NodeJS.Timeout;
+    let loadTimeout: NodeJS.Timeout;
+    let hideTimeout: NodeJS.Timeout;
+    
+    // Simulated loading progress
+    interval = setInterval(() => {
       setProgress(prev => {
-        const newValue = prev + Math.random() * 15;
-        return newValue >= 100 ? 100 : newValue;
+        const newProgress = Math.min(prev + Math.random() * 10, 100);
+        if (newProgress === 100) {
+          clearInterval(interval);
+          setMainLoaded(true);
+        }
+        return newProgress;
       });
     }, 200);
+
+    // Ensure minimum display time for loading screen
+    loadTimeout = setTimeout(() => {
+      setMainLoaded(true);
+    }, minDisplayTime);
     
-    return () => clearInterval(timer);
-  }, []);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(loadTimeout);
+      clearTimeout(hideTimeout);
+    };
+  }, [minDisplayTime]);
   
+  // Once main content is loaded, start exit animation
   useEffect(() => {
-    if (progress >= 100) {
-      // Complete loading animation then hide loader
-      setTimeout(() => {
-        setShowLoader(false);
+    if (mainLoaded) {
+      const hideTimeout = setTimeout(() => {
+        setIsVisible(false);
         if (onLoadComplete) onLoadComplete();
-      }, 500);
+      }, 500); // Allow time for the progress to reach 100%
+      
+      return () => clearTimeout(hideTimeout);
     }
-  }, [progress, onLoadComplete]);
-  
-  if (!showLoader) return null;
+  }, [mainLoaded, onLoadComplete]);
   
   return (
-    <motion.div 
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background"
-      initial={{ opacity: 1 }}
-      animate={{ opacity: showLoader ? 1 : 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="relative w-48 h-48">
+    <AnimatePresence>
+      {isVisible && (
         <motion.div
-          className="absolute inset-0 marcello-x-pattern opacity-50"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0.7, 0.5],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-          }}
-        />
-        
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-5xl font-playfair gold-shimmer">L</span>
-        </div>
-      </div>
-      
-      <div className="w-64 h-1 bg-gray-800 rounded-full mt-8 overflow-hidden">
-        <motion.div 
-          className="h-full bg-gradient-to-r from-primary/50 to-primary"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-        />
-      </div>
-      
-      <p className="mt-4 text-sm text-muted-foreground font-playfair">
-        {progress < 100 ? 'Loading experience...' : 'Enjoy your stay'}
-      </p>
-    </motion.div>
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+        >
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="flex items-center justify-center mb-8"
+            >
+              <div className="relative">
+                <AdinkraSymbol 
+                  symbol={getRandomSymbol() as any} 
+                  size={120}
+                  color="var(--royal-gold)"
+                  animate="pulse"
+                  opacity={0.8}
+                />
+                
+                {/* Gold ring animation */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-primary"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.7, 0.2, 0.7],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                ></motion.div>
+              </div>
+            </motion.div>
+            
+            <motion.h1
+              className="text-4xl md:text-5xl font-playfair font-bold mb-4 text-primary gold-shimmer"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              L-Lounge
+            </motion.h1>
+            
+            <motion.p
+              className="text-lg text-muted-foreground mb-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
+              Ghana's Most Exclusive Lounge Experience
+            </motion.p>
+            
+            {/* Progress bar */}
+            <motion.div
+              className="w-64 h-1 bg-muted relative overflow-hidden rounded-full"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+            >
+              <motion.div
+                className="absolute top-0 left-0 h-full bg-primary"
+                initial={{ width: "0%" }}
+                animate={{ width: `${progress}%` }}
+                transition={{ ease: "easeOut" }}
+              ></motion.div>
+            </motion.div>
+            
+            <motion.p
+              className="text-sm text-muted-foreground mt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.8 }}
+            >
+              {Math.round(progress)}%
+            </motion.p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

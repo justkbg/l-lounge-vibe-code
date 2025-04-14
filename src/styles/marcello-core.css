@@ -1,0 +1,232 @@
+
+/* Marcello Design System - Core Styles */
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Variables */
+:root {
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-gold: 0 0 15px rgba(212, 175, 55, 0.35);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  --transition-slow: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(31, 31, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 10px;
+  
+  /* Gold tones */
+  --royal-gold: #FFD700;
+  --antique-gold: #CFB53B;
+  --burnished-gold: #DAA520;
+  --pale-gold: #E6C200;
+  --rose-gold: #B76E79;
+  
+  /* Animation timing */
+  --animation-slow: 1s;
+  --animation-medium: 0.5s;
+  --animation-fast: 0.3s;
+  
+  /* Z-indices */
+  --z-below: -1;
+  --z-normal: 1;
+  --z-above: 10;
+  --z-modal: 50;
+  --z-overlay: 100;
+  --z-highest: 1000;
+}
+
+/* Base */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Enhanced smooth scrolling */
+html.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.scroll-container {
+  scroll-behavior: auto !important;
+  position: relative;
+}
+
+/* Layout helpers */
+.container-custom {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    padding: 0 2.5rem;
+  }
+}
+
+/* Glassmorphism effects */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+}
+
+/* Typographic scale */
+.text-display {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-h2 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body-lg {
+  font-size: clamp(1.1rem, 1.2vw, 1.25rem);
+  line-height: 1.5;
+}
+
+.text-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.text-body-sm {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+}
+
+/* Cinematic loading indicators */
+.loading-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(200%);
+  }
+}
+
+/* Responsive helpers */
+.only-mobile {
+  display: block;
+}
+
+.only-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .only-mobile {
+    display: none;
+  }
+  
+  .only-desktop {
+    display: block;
+  }
+}
+
+/* Utilities */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Preloader */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  z-index: var(--z-highest);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Cinematic depth of field */
+.cinematic-depth {
+  position: relative;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.cinematic-depth > * {
+  transform: translateZ(0);
+}
+
+/* Ensure all images use hardware acceleration */
+img {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  transform: translateZ(0);
+}

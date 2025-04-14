@@ -1,112 +1,184 @@
 
-// Additional gallery images for a more complete gallery experience
-export const galleryImages = [
+// Gallery data with different categories
+
+export type GalleryImage = {
+  id: number;
+  title: string;
+  category: string;
+  image: string;
+  description?: string;
+  featured?: boolean;
+};
+
+// High-quality gallery images for L-Lounge
+export const galleryImages: GalleryImage[] = [
+  // Interior shots
   {
     id: 1,
-    title: "Restaurant Interior",
+    title: "L-Lounge Main Bar",
     category: "interior",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+    image: "https://images.unsplash.com/photo-1525268323446-0505b6fe7778?ixlib=rb-4.0.3&auto=format&fit=crop&w=1742&q=80",
+    featured: true
   },
   {
     id: 2,
-    title: "Signature Dish",
-    category: "food",
-    image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+    title: "VIP Seating Area",
+    category: "interior",
+    image: "https://images.unsplash.com/photo-1544085701-4d54e9f41c45?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80"
   },
   {
     id: 3,
-    title: "Cocktail Selection",
-    category: "drinks",
-    image: "https://images.unsplash.com/photo-1544252890-411522da5936?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+    title: "Outdoor Patio",
+    category: "interior",
+    image: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?ixlib=rb-4.0.3&auto=format&fit=crop&w=1746&q=80"
   },
   {
     id: 4,
-    title: "Private Dining",
+    title: "Private Dining Area",
     category: "interior",
-    image: "https://images.unsplash.com/photo-1544931770-3f0a3e93eabc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1526&q=80"
+    image: "https://images.unsplash.com/photo-1523529364348-e930dcb39642?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: 5,
-    title: "Chef's Table",
-    category: "food",
-    image: "https://images.unsplash.com/photo-1495214783159-3503fd1b572d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+    title: "Ambient Night Lighting",
+    category: "interior",
+    image: "https://images.unsplash.com/photo-1590332339349-902d8f9c38d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    featured: true
   },
+  
+  // Food images
   {
     id: 6,
-    title: "Wine Selection",
-    category: "drinks",
-    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+    title: "Signature Grill Platter",
+    category: "food",
+    image: "https://images.unsplash.com/photo-1594041680539-fc598d3784ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=1771&q=80",
+    featured: true
   },
   {
     id: 7,
-    title: "Lounge Area",
-    category: "interior",
-    image: "https://images.unsplash.com/photo-1571266028243-a675886a191c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+    title: "Local Delicacies",
+    category: "food",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80"
   },
   {
     id: 8,
-    title: "Dessert Platter",
+    title: "Chef's Special",
     category: "food",
-    image: "https://images.unsplash.com/photo-1547595468-fdb5de8a07d6?q=80&w=1000&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80"
   },
   {
     id: 9,
-    title: "Craft Beer",
-    category: "drinks",
-    image: "https://images.unsplash.com/photo-1535400255456-1219d5f7c208?q=80&w=1000&auto=format&fit=crop"
+    title: "Gourmet Burger",
+    category: "food",
+    image: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: 10,
-    title: "Live Music",
-    category: "events",
-    image: "https://images.unsplash.com/photo-1542124937-4027ade70c2d?q=80&w=1000&auto=format&fit=crop"
+    title: "Dessert Selection",
+    category: "food",
+    image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1827&q=80"
   },
+  
+  // Drinks imagery
   {
     id: 11,
-    title: "Private Event",
-    category: "events",
-    image: "https://images.unsplash.com/photo-1525268323556-0505312a9b6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
+    title: "Signature Cocktail",
+    category: "drinks",
+    image: "https://images.unsplash.com/photo-1560178783-26a8a8d67444?ixlib=rb-4.0.3&auto=format&fit=crop&w=1759&q=80",
+    featured: true
   },
   {
     id: 12,
-    title: "Bar Area",
-    category: "interior",
-    image: "https://images.unsplash.com/photo-1525268323556-0505312a9b6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
+    title: "Premium Spirits",
+    category: "drinks",
+    image: "https://images.unsplash.com/photo-1613126722376-2acce4b1ec93?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: 13,
-    title: "Appetizer Selection",
-    category: "food",
-    image: "https://images.unsplash.com/photo-1485963631004-f2f00b1d6606?q=80&w=1024&auto=format&fit=crop"
+    title: "Tropical Concoction",
+    category: "drinks",
+    image: "https://images.unsplash.com/photo-1564414872027-3ed99f0a27b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1735&q=80"
   },
   {
     id: 14,
-    title: "Signature Cocktail",
+    title: "Wine Selection",
     category: "drinks",
-    image: "https://images.unsplash.com/photo-1619895091624-4b0732d6b887?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
+    image: "https://images.unsplash.com/photo-1553361371-9513cbd8a8a4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80"
   },
   {
     id: 15,
-    title: "Wedding Reception",
-    category: "events",
-    image: "https://images.unsplash.com/photo-1582037928769-181cf6ea3d9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80"
+    title: "Craft Beer",
+    category: "drinks",
+    image: "https://images.unsplash.com/photo-1566633806327-68e152aaf26d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
   },
+  
+  // Events
   {
     id: 16,
-    title: "Outdoor Seating",
-    category: "interior",
-    image: "https://images.unsplash.com/photo-1650634050753-03bca4da5c01?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fHJlc3RhdXJhbnQlMjBwYXRpb3xlbnwwfHwwfHx8MA%3D%3D"
+    title: "Weekend DJ Night",
+    category: "events",
+    image: "https://images.unsplash.com/photo-1571151329794-62e7f5477457?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    featured: true
   },
   {
     id: 17,
-    title: "Seafood Special",
-    category: "food",
-    image: "https://images.unsplash.com/photo-1679589612099-a5a5530a02be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2VhZm9vZCUyMGRpc2h8ZW58MHx8MHx8fDA%3D"
+    title: "Live Band Performance",
+    category: "events",
+    image: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
   },
   {
     id: 18,
-    title: "Weekend Brunch",
+    title: "Exclusive VIP Event",
     category: "events",
-    image: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJydW5jaHxlbnwwfHwwfHx8MA%3D%3D"
+    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80"
+  },
+  {
+    id: 19,
+    title: "Corporate Event",
+    category: "events",
+    image: "https://images.unsplash.com/photo-1556125574-d7f27ec36a82?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
+  },
+  {
+    id: 20,
+    title: "Mix & Mingle Night",
+    category: "events",
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
+  },
+  
+  // Add more Ghanaian-themed images
+  {
+    id: 21,
+    title: "Traditional Drummers",
+    category: "events",
+    image: "https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1672&q=80"
+  },
+  {
+    id: 22,
+    title: "Kente-inspired Decor",
+    category: "interior",
+    image: "https://images.unsplash.com/photo-1543310610-58d79e523ab5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1690&q=80"
+  },
+  {
+    id: 23,
+    title: "African Fusion Cuisine",
+    category: "food",
+    image: "https://images.unsplash.com/photo-1519666150144-4f130b8f8c05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1778&q=80"
+  },
+  {
+    id: 24,
+    title: "Urban Nightlife",
+    category: "events",
+    image: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1830&q=80"
   }
 ];
+
+// Get featured images for special displays
+export const getFeaturedImages = (): GalleryImage[] => {
+  return galleryImages.filter(image => image.featured);
+};
+
+// Get images by category
+export const getImagesByCategory = (category: string): GalleryImage[] => {
+  if (category === 'all') return galleryImages;
+  return galleryImages.filter(image => image.category === category);
+};

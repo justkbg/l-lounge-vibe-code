@@ -1,292 +1,261 @@
 
 /**
- * Enhanced Cinematic Scroll Utility
- * Provides smooth, movie-like scrolling effects and animations
+ * Cinema-quality scroll effects
+ * Adds smooth parallax, reveal animations, and dynamic lighting on scroll
  */
 
-export const initCinematicScroll = () => {
-  // Add the scroll-container class to main elements if not already present
-  document.querySelectorAll('main').forEach(element => {
-    if (!element.classList.contains('scroll-container')) {
-      element.classList.add('scroll-container');
+interface CinematicOptions {
+  selector?: string;
+  threshold?: number;
+  rootMargin?: string;
+  revealClass?: string;
+  parallaxSelector?: string;
+  parallaxSpeedAttribute?: string;
+  cursorTrail?: boolean;
+  spotlightEffect?: boolean;
+  adinkraParallax?: boolean;
+}
+
+export const initCinematicScroll = (options: CinematicOptions = {}) => {
+  const {
+    selector = '.reveal-on-scroll',
+    threshold = 0.1,
+    rootMargin = '0px 0px -100px 0px',
+    revealClass = 'visible',
+    parallaxSelector = '[data-parallax]',
+    parallaxSpeedAttribute = 'data-speed',
+    cursorTrail = true,
+    spotlightEffect = true,
+    adinkraParallax = true
+  } = options;
+
+  // Initialize reveal on scroll
+  const initRevealOnScroll = () => {
+    const elements = document.querySelectorAll(selector);
+    
+    if (elements.length === 0) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add(revealClass);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold, rootMargin });
+    
+    elements.forEach((element) => {
+      observer.observe(element);
+    });
+  };
+  
+  // Initialize parallax effect
+  const initParallax = () => {
+    const parallaxElements = document.querySelectorAll(parallaxSelector);
+    
+    if (parallaxElements.length === 0) return;
+    
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      
+      parallaxElements.forEach((element) => {
+        const speed = parseFloat(element.getAttribute(parallaxSpeedAttribute) || '0.1');
+        const direction = element.getAttribute('data-direction') || 'up';
+        
+        let yPos = 0;
+        
+        if (direction === 'up') {
+          yPos = -scrollY * speed;
+        } else if (direction === 'down') {
+          yPos = scrollY * speed;
+        } else if (direction === 'combined') {
+          // Combined movement for more natural feel
+          const elementRect = element.getBoundingClientRect();
+          const elementCenterY = elementRect.top + elementRect.height / 2;
+          const viewportCenterY = window.innerHeight / 2;
+          const distance = elementCenterY - viewportCenterY;
+          yPos = distance * speed * -0.2; // Make speed relate to element position
+        }
+        
+        // Apply 3D transform for hardware acceleration
+        const transform = `translate3d(0, ${yPos}px, 0)`;
+        
+        if (element instanceof HTMLElement) {
+          element.style.transform = transform;
+        }
+      });
+    };
+    
+    // Initial call to set positions
+    handleScroll();
+    
+    // Add throttled scroll listener for better performance
+    let lastScrollTime = 0;
+    const scrollThreshold = 10;
+    
+    window.addEventListener('scroll', () => {
+      const now = Date.now();
+      
+      if (now - lastScrollTime > scrollThreshold) {
+        lastScrollTime = now;
+        window.requestAnimationFrame(handleScroll);
+      }
+    });
+  };
+  
+  // Initialize cursor trail effect
+  const initCursorTrail = () => {
+    if (!cursorTrail) return;
+    
+    // Remove existing cursor trails if any
+    const existingTrails = document.querySelectorAll('.cursor-trail');
+    existingTrails.forEach(trail => trail.remove());
+    
+    // Create cursor trail elements
+    const numTrails = 5;
+    const trails: HTMLDivElement[] = [];
+    
+    for (let i = 0; i < numTrails; i++) {
+      const trail = document.createElement('div');
+      trail.className = 'cursor-trail';
+      trail.style.opacity = `${(numTrails - i) / numTrails * 0.3}`;
+      document.body.appendChild(trail);
+      trails.push(trail);
     }
+    
+    // Trail positions array
+    const positions: {x: number, y: number}[] = Array(numTrails).fill({x: 0, y: 0});
+    
+    // Update cursor position
+    const handleMouseMove = (e: MouseEvent) => {
+      // Update new cursor position
+      positions.pop();
+      positions.unshift({x: e.clientX, y: e.clientY});
+      
+      // Update elements
+      trails.forEach((trail, index) => {
+        const pos = positions[index] || positions[0];
+        trail.style.left = `${pos.x}px`;
+        trail.style.top = `${pos.y}px`;
+      });
+    };
+    
+    // Hide trails when mouse leaves window
+    const handleMouseLeave = () => {
+      trails.forEach(trail => {
+        trail.style.opacity = '0';
+      });
+    };
+    
+    // Show trails when mouse enters window
+    const handleMouseEnter = () => {
+      trails.forEach((trail, index) => {
+        trail.style.opacity = `${(numTrails - index) / numTrails * 0.3}`;
+      });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseenter', handleMouseEnter);
+  };
+  
+  // Initialize spotlight effect
+  const initSpotlightEffect = () => {
+    if (!spotlightEffect) return;
+    
+    const elements = document.querySelectorAll('.spotlight-effect');
+    
+    if (elements.length === 0) return;
+    
+    elements.forEach(element => {
+      element.addEventListener('mousemove', (e: MouseEvent) => {
+        const rect = element.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        (element as HTMLElement).style.setProperty('--x', `${x}%`);
+        (element as HTMLElement).style.setProperty('--y', `${y}%`);
+      });
+    });
+  };
+  
+  // Initialize adinkra parallax effect
+  const initAdinkraParallax = () => {
+    if (!adinkraParallax) return;
+    
+    const adinkraSymbols = document.querySelectorAll('.adinkra-symbol');
+    
+    if (adinkraSymbols.length === 0) return;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      // Mouse position normalized to -1 to 1
+      const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      
+      adinkraSymbols.forEach((symbol) => {
+        // Random offset factor for each symbol
+        const factor = parseFloat((symbol as HTMLElement).dataset.factor || '1');
+        const moveX = mouseX * 10 * factor;
+        const moveY = mouseY * 10 * factor;
+        
+        // Apply subtle movement
+        (symbol as HTMLElement).style.transform = `translate(${moveX}px, ${moveY}px) rotate(${mouseX * 5}deg)`;
+      });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    // Add random factor to each symbol
+    adinkraSymbols.forEach((symbol) => {
+      const factor = 0.5 + Math.random();
+      (symbol as HTMLElement).dataset.factor = factor.toString();
+    });
+  };
+  
+  // Initialize all cinematic effects
+  initRevealOnScroll();
+  initParallax();
+  initCursorTrail();
+  initSpotlightEffect();
+  initAdinkraParallax();
+  
+  // Re-run on window resize for responsiveness
+  let resizeTimeout: number;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = window.setTimeout(() => {
+      initParallax();
+    }, 100);
   });
+};
 
-  const scrollContainer = document.querySelector(".scroll-container");
-  const parallaxSections = document.querySelectorAll(".parallax-section");
-  const cinematicReveals = document.querySelectorAll(".cinematic-reveal");
-  const verticalReveals = document.querySelectorAll(".vertical-reveal");
-  const staggeredElements = document.querySelectorAll(".staggered-fade");
-  const horizontalReveals = document.querySelectorAll(".horizontal-reveal");
-  const zoomElements = document.querySelectorAll(".zoom-reveal");
-  const rotateElements = document.querySelectorAll(".rotate-reveal");
-  const blurElements = document.querySelectorAll(".blur-reveal");
-
-  if (!scrollContainer) {
-    console.warn("No .scroll-container found. Cinematic scroll not initialized.");
+// Utility to create scene transitions
+export const createSceneTransition = (callback: () => void, direction: 'in' | 'out' = 'in') => {
+  const transitionElement = document.querySelector('.scene-transition');
+  
+  if (!transitionElement) {
+    console.error('Scene transition element not found. Add <div class="scene-transition"></div> to your component.');
+    callback();
     return;
   }
-
-  // Function to handle parallax effect with enhanced smoothness
-  const handleParallax = () => {
-    parallaxSections.forEach((section) => {
-      // Type assertion to access dataset property
-      const htmlSection = section as HTMLElement;
-      const depth = parseFloat(htmlSection.dataset.depth || "0.2");
-      const speed = parseFloat(htmlSection.dataset.speed || "0.5");
-      const direction = htmlSection.dataset.direction || "vertical";
-      
-      // Calculate transform based on scroll position with easing
-      const scrollPosition = window.scrollY;
-      const translateY = scrollPosition * depth * speed;
-      
-      if (direction === "horizontal") {
-        htmlSection.style.transform = `translateX(${translateY}px)`;
-      } else if (direction === "both") {
-        htmlSection.style.transform = `translate3d(${translateY * 0.3}px, ${translateY}px, 0)`;
-      } else {
-        htmlSection.style.transform = `translateY(${translateY}px)`;
-      }
-      
-      // Optional opacity effect for depth perception
-      if (htmlSection.dataset.fade === "true") {
-        const opacity = Math.max(0, Math.min(1, 1 - (translateY * 0.001)));
-        htmlSection.style.opacity = opacity.toString();
-      }
-    });
-  };
-
-  // Function to handle cinematic reveal with dramatic timing
-  const handleCinematicReveal = () => {
-    cinematicReveals.forEach((element) => {
-      const htmlElement = element as HTMLElement;
-      const bounding = element.getBoundingClientRect();
-      const triggerPoint = parseFloat(htmlElement.dataset.triggerPoint || "0.75");
-      const delay = parseFloat(htmlElement.dataset.delay || "0");
-      const isVisible = bounding.top < window.innerHeight * triggerPoint;
-
-      if (isVisible) {
-        if (!htmlElement.classList.contains("visible")) {
-          setTimeout(() => {
-            htmlElement.classList.add("visible");
-          }, delay * 1000);
-        }
-      } else if (htmlElement.dataset.once !== "true") {
-        htmlElement.classList.remove("visible");
-      }
-    });
-  };
-
-  // Function to handle vertical reveal animations
-  const handleVerticalReveal = () => {
-    verticalReveals.forEach((element) => {
-      const htmlElement = element as HTMLElement;
-      const bounding = element.getBoundingClientRect();
-      const triggerPoint = parseFloat(htmlElement.dataset.triggerPoint || "0.8");
-      const isVisible = bounding.top < window.innerHeight * triggerPoint;
-      const delay = parseFloat(htmlElement.dataset.delay || "0");
-
-      if (isVisible) {
-        if (!htmlElement.classList.contains("visible")) {
-          setTimeout(() => {
-            htmlElement.classList.add("visible");
-          }, delay * 1000);
-        }
-      } else if (htmlElement.dataset.once !== "true") {
-        htmlElement.classList.remove("visible");
-      }
-    });
-  };
-
-  // Function to handle staggered reveals
-  const handleStaggeredFade = () => {
-    staggeredElements.forEach((group) => {
-      const htmlGroup = group as HTMLElement;
-      const bounding = group.getBoundingClientRect();
-      const triggerPoint = parseFloat(htmlGroup.dataset.triggerPoint || "0.8");
-      const isVisible = bounding.top < window.innerHeight * triggerPoint;
-
-      if (isVisible) {
-        htmlGroup.classList.add("animate");
-      } else if (htmlGroup.dataset.once !== "true") {
-        htmlGroup.classList.remove("animate");
-      }
-    });
-  };
-
-  // Function to handle horizontal reveal animations
-  const handleHorizontalReveal = () => {
-    horizontalReveals.forEach((element) => {
-      const htmlElement = element as HTMLElement;
-      const bounding = element.getBoundingClientRect();
-      const triggerPoint = parseFloat(htmlElement.dataset.triggerPoint || "0.8");
-      const isVisible = bounding.top < window.innerHeight * triggerPoint;
-      const delay = parseFloat(htmlElement.dataset.delay || "0");
-      const direction = htmlElement.dataset.direction || "left";
-
-      if (isVisible) {
-        if (!htmlElement.classList.contains("visible")) {
-          setTimeout(() => {
-            htmlElement.classList.add("visible");
-            htmlElement.classList.add(`from-${direction}`);
-          }, delay * 1000);
-        }
-      } else if (htmlElement.dataset.once !== "true") {
-        htmlElement.classList.remove("visible");
-      }
-    });
-  };
-
-  // Function to handle zoom reveal animations
-  const handleZoomReveal = () => {
-    zoomElements.forEach((element) => {
-      const htmlElement = element as HTMLElement;
-      const bounding = element.getBoundingClientRect();
-      const triggerPoint = parseFloat(htmlElement.dataset.triggerPoint || "0.8");
-      const isVisible = bounding.top < window.innerHeight * triggerPoint;
-      const delay = parseFloat(htmlElement.dataset.delay || "0");
-      const zoomType = htmlElement.dataset.zoom || "in"; // "in" or "out"
-
-      if (isVisible) {
-        if (!htmlElement.classList.contains("visible")) {
-          setTimeout(() => {
-            htmlElement.classList.add("visible");
-            htmlElement.classList.add(`zoom-${zoomType}`);
-          }, delay * 1000);
-        }
-      } else if (htmlElement.dataset.once !== "true") {
-        htmlElement.classList.remove("visible");
-      }
-    });
-  };
-
-  // Function to handle rotate reveal animations
-  const handleRotateReveal = () => {
-    rotateElements.forEach((element) => {
-      const htmlElement = element as HTMLElement;
-      const bounding = element.getBoundingClientRect();
-      const triggerPoint = parseFloat(htmlElement.dataset.triggerPoint || "0.8");
-      const isVisible = bounding.top < window.innerHeight * triggerPoint;
-      const delay = parseFloat(htmlElement.dataset.delay || "0");
-      const degrees = parseFloat(htmlElement.dataset.degrees || "10");
-      const direction = htmlElement.dataset.direction || "clockwise";
-
-      if (isVisible) {
-        if (!htmlElement.classList.contains("visible")) {
-          setTimeout(() => {
-            htmlElement.classList.add("visible");
-            // Apply rotation based on direction
-            const rotateValue = direction === "clockwise" ? degrees : -degrees;
-            htmlElement.style.transform = `rotate(${rotateValue}deg)`;
-          }, delay * 1000);
-        }
-      } else if (htmlElement.dataset.once !== "true") {
-        htmlElement.classList.remove("visible");
-        htmlElement.style.transform = `rotate(0deg)`;
-      }
-    });
-  };
-
-  // Function to handle blur reveal animations
-  const handleBlurReveal = () => {
-    blurElements.forEach((element) => {
-      const htmlElement = element as HTMLElement;
-      const bounding = element.getBoundingClientRect();
-      const triggerPoint = parseFloat(htmlElement.dataset.triggerPoint || "0.8");
-      const isVisible = bounding.top < window.innerHeight * triggerPoint;
-      const delay = parseFloat(htmlElement.dataset.delay || "0");
-      const blurAmount = parseFloat(htmlElement.dataset.blur || "5");
-
-      if (isVisible) {
-        if (!htmlElement.classList.contains("visible")) {
-          setTimeout(() => {
-            htmlElement.classList.add("visible");
-            htmlElement.style.filter = "blur(0px)";
-          }, delay * 1000);
-        }
-      } else if (htmlElement.dataset.once !== "true") {
-        htmlElement.classList.remove("visible");
-        htmlElement.style.filter = `blur(${blurAmount}px)`;
-      }
-    });
-  };
-
-  // Modified smooth scroll function to fix glitches
-  const enableSmoothScroll = () => {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href') as string;
-        if (!targetId || targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (!targetElement) return;
-        
-        // Instant scroll to avoid glitches
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
-  };
-
-  // Apply initial scroll effects
-  handleParallax();
-  handleCinematicReveal();
-  handleVerticalReveal();
-  handleStaggeredFade();
-  handleHorizontalReveal();
-  handleZoomReveal();
-  handleRotateReveal();
-  handleBlurReveal();
-  enableSmoothScroll();
-
-  // Add scroll event listener with debounce for performance
-  let ticking = false;
-  window.addEventListener("scroll", () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        handleParallax();
-        handleCinematicReveal();
-        handleVerticalReveal();
-        handleStaggeredFade();
-        handleHorizontalReveal();
-        handleZoomReveal();
-        handleRotateReveal();
-        handleBlurReveal();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-
-  // Add resize event listener
-  window.addEventListener("resize", () => {
-    handleParallax();
-    handleCinematicReveal();
-    handleVerticalReveal();
-    handleStaggeredFade();
-    handleHorizontalReveal();
-    handleZoomReveal();
-    handleRotateReveal();
-    handleBlurReveal();
-  });
-};
-
-// Helper function to trigger animations manually
-export const triggerAnimation = (elementSelector: string, animationClass: string, delay: number = 0) => {
-  const element = document.querySelector(elementSelector) as HTMLElement;
-  if (element) {
+  
+  // Add active class to start transition
+  transitionElement.classList.add('active');
+  if (direction === 'out') {
+    transitionElement.classList.add('out');
+  }
+  
+  // Wait for transition to complete
+  setTimeout(() => {
+    // Execute callback
+    callback();
+    
+    // Complete the transition
     setTimeout(() => {
-      element.classList.add(animationClass);
-    }, delay);
-  }
-};
-
-// Helper to add parallax to elements dynamically
-export const addParallaxEffect = (elementSelector: string, depth: number = 0.2, direction: string = 'vertical') => {
-  const element = document.querySelector(elementSelector) as HTMLElement;
-  if (element) {
-    element.classList.add('parallax-section');
-    element.dataset.depth = depth.toString();
-    element.dataset.direction = direction;
-  }
+      transitionElement.classList.remove('active');
+      if (direction === 'out') {
+        transitionElement.classList.remove('out');
+      }
+    }, 50);
+  }, 700); // Match this to your transition duration
 };
