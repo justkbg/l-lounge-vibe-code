@@ -14,26 +14,32 @@ export const useOptimizedImage = ({ src, alt, fallbackIdentifier }: UseOptimized
   const [isError, setIsError] = useState<boolean>(false);
   
   useEffect(() => {
+    // Reset states when src changes
     setIsLoading(true);
     setIsError(false);
     
+    // Create a new image to preload
     const img = new Image();
-    img.src = src;
     
+    // Add event listeners
     img.onload = () => {
       setImageUrl(src);
       setIsLoading(false);
     };
     
     img.onerror = () => {
-      // Use fallback image
+      // Calculate fallback based on alt text or identifier
       const fallback = getFallbackImageUrl(fallbackIdentifier || alt);
       setImageUrl(fallback);
       setIsLoading(false);
       setIsError(true);
-      console.log(`Failed to load image: ${src}, using fallback`);
+      console.log(`Failed to load image: ${src}, using fallback: ${fallback}`);
     };
     
+    // Start loading the image
+    img.src = src;
+    
+    // Cleanup event listeners on unmount or when src changes
     return () => {
       img.onload = null;
       img.onerror = null;

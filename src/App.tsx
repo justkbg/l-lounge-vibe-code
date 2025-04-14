@@ -30,8 +30,10 @@ const ScrollToTop = () => {
     // Reset any ongoing animations
     const animatingElements = document.querySelectorAll('.animate-fade-in, .animate-scale-in');
     animatingElements.forEach(el => {
-      el.classList.remove('animate-fade-in', 'animate-scale-in');
-      void el.offsetWidth; // Force reflow
+      // Force reflow with a safer approach that checks element type
+      if (el instanceof HTMLElement) {
+        void el.offsetWidth;
+      }
     });
     
     // Add cinematic transition effect
@@ -97,6 +99,12 @@ const App = () => {
         const img = new Image();
         img.src = src;
       });
+      
+      // Set timeout to hide loading screen after a reasonable time
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsFirstLoad(false);
+      }, 3000); // 3 seconds for first-time visitors
     } else {
       // Returning visitor - hide loading screen faster
       setTimeout(() => {

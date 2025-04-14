@@ -8,6 +8,7 @@ interface OptimizedImageProps {
   className?: string;
   placeholderColor?: string;
   fallbackIdentifier?: string;
+  priority?: boolean;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -15,9 +16,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   alt,
   className = '',
   placeholderColor = 'rgba(0,0,0,0.1)',
-  fallbackIdentifier
+  fallbackIdentifier,
+  priority = false
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(priority);
   const [isLoaded, setIsLoaded] = useState(false);
   const { imageUrl, isLoading } = useOptimizedImage({ 
     src, 
@@ -26,6 +28,12 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   });
   
   useEffect(() => {
+    // If priority is true, load immediately without observer
+    if (priority) {
+      setIsVisible(true);
+      return;
+    }
+    
     // Use Intersection Observer for lazy loading
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -36,13 +44,14 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       });
     }, { rootMargin: '200px' });
     
-    const element = document.getElementById(`img-${src.replace(/[^\w]/g, '')}`);
+    const elementId = `img-${src.replace(/[^\w]/g, '')}`;
+    const element = document.getElementById(elementId);
     if (element) {
       observer.observe(element);
     }
     
     return () => observer.disconnect();
-  }, [src]);
+  }, [src, priority]);
   
   const handleImageLoad = () => {
     setIsLoaded(true);
@@ -57,24 +66,25 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   return (
     <div 
       id={`img-${src.replace(/[^\w]/g, '')}`}
-      className="progressive-image"
+      className="progressive-image relative"
     >
       {/* Placeholder */}
       {!isLoaded && (
         <div 
-          className="progressive-image-placeholder" 
+          className="progressive-image-placeholder absolute inset-0" 
           style={{ backgroundColor: placeholderColor }}
         ></div>
       )}
       
-      {/* Actual image - only load when in viewport */}
+      {/* Actual image - only load when in viewport or priority */}
       {isVisible && (
         <img
           src={imageUrl}
           alt={alt}
           className={imgClasses}
           onLoad={handleImageLoad}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
         />
       )}
     </div>
